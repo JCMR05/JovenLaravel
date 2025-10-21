@@ -49,9 +49,7 @@ class UserController extends Controller
         $registro = new User;
         $registro->name = $request->input('name');
         $registro->email = $request->input('email');
-        if ($registro->filled('password')) {
-            $registro->password = Hash::make($request->input('password'));
-        }
+        $registro->password = Hash::make($request->input('password'));
         $registro->activo = $request->input('activo');
         $registro->save();
 
@@ -89,8 +87,9 @@ class UserController extends Controller
         $registro = User::findOrFail($id);
         $registro->name = $request->input('name');
         $registro->email = $request->input('email');
-        $registro->password = bcrypt($request->input('password'));
+        $registro->password = Hash::make($request->input('password'));
         $registro->activo = $request->input('activo');
+        $registro->syncRoles([$request->input('role')]);
         $registro->save();
 
         return redirect()->route('usuarios.index')->with('mensaje', 'Registro '.$registro->name.' actualizado satisfatoriamente. ');
