@@ -23,16 +23,15 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-
         $method = $this->method();
-        $id = $this->route('usuario') ?? Auth::id(); //solo agregar cuando se este editando el perfil
+        $id = $this->route('usuario') ?? Auth::id(); 
         
-        $rules = [
+        $rules= [
             'name' => 'required|string|max:255',
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email')->ignore($id),
+                Rule::unique('users', 'email')->ignore($id), // 👈 Correcto, todo en array
             ],
         ];
 
@@ -43,28 +42,22 @@ class UserRequest extends FormRequest
         }
 
         return $rules;
-
-        // return [
-        //     'name' => 'required|string|max:255',
-        //     'email' => 'required|email|unique:users,email,' . $this->route('usuario'),
-        //     'password' => 'required|min:8|confirmed',
-        // ];
     }
-
     public function messages()
     {
         return [
             'name.required' => 'El campo nombre es obligatorio.',
-            'name.string' => 'El campo nombre debe ser una cadena de texto.',
-            'name.max' => 'El campo nombre no puede superar los 255 caracteres.',
+            'name.string' => 'El nombre debe ser una cadena de texto.',
+            'name.max' => 'El nombre no puede tener más de 255 caracteres.',
 
             'email.required' => 'El campo correo electrónico es obligatorio.',
             'email.email' => 'Debe ingresar un correo electrónico válido.',
-            'email.unique' => 'Este correo electrónico ya esta registrado.',
+            'email.unique' => 'Este correo electrónico ya está registrado.',
 
             'password.required' => 'El campo contraseña es obligatorio.',
             'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
-            'password.confirmed' => 'Las contraseñas no coinciden.',
+            'password.confirmed' => 'Las contraseñas no coinciden.'
         ];
     }
+
 }

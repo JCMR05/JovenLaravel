@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -8,22 +9,22 @@ class AuthController extends Controller
 {
     public function login(Request $request){
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
+            'email'=>'required|email',
+            'password'=>'required'
         ]);
 
-        $credenciales = $request->only('email', 'password');
+        $credenciales=$request->only('email', 'password');
 
         if(Auth::attempt($credenciales)){
-            $user = Auth::user();
+            $user= Auth::user();
 
             if($user->activo){
-                return redirect()->route('dashboard');
+                return redirect()->intended();
             }else{
                 Auth::logout();
-                return back()->with('error', 'El usuario no se encuentra activo, contacte al administrador');
+                return back()->with('error', 'Su cuenta esta inactiva. Contacte con el administrador');
             }
         }
-        return back()->with('error', 'Los datos ingresados no son correctos');
+        return back()->with('error', 'Las credenciales no son correctas')->withInput();
     }
 }

@@ -13,23 +13,23 @@ use App\Http\Requests\UserRequest;
 
 class RegisterController extends Controller
 {
-    public function showRegistrationForm(){
+    public function showRegistroForm(){
         return view('autenticacion.registro');
     }
 
-    public function registration(UserRequest $request){
-        $user = User::create([
+    public function registrar(UserRequest $request){
+        $usuario = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'activo' => 1, //activar automaticamente 
+            'activo' => 1, // Activar automáticamente
         ]);
 
-        $clientRole = Role::where('name', 'cliente')->first();
-        if($clientRole){
-            $user->assignRole($clientRole);
+        $clienteRol=Role::where('name','cliente')->first();
+        if($clienteRol){
+            $usuario->assignRole($clienteRol);
         }
-        Auth::login($user);
+        Auth::login($usuario);
         return redirect()->route('dashboard')->with('mensaje', 'Registro exitoso. ¡Bienvenido!');
     }
 }

@@ -20,17 +20,25 @@
             <!--begin::Sidebar Menu-->
             <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="{{route('dashboard')}}" class="nav-link" id="menuDashboard">
+                    <a href="{{route('dashboard')}}" class="nav-link" id="mnuDashboard">
                         <i class="nav-icon bi bi-speedometer"></i>
                         <p>
-                            Panel de Control
+                            Dashboard
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('perfil.pedidos')}}" class="nav-link" id="mnuPedidos">
+                        <i class="nav-icon bi bi-bag-fill"></i>
+                        <p>
+                            Pedidos
                         </p>
                     </a>
                 </li>
                 @canany(['user-list', 'rol-list'])
-                <li class="nav-item" id="menuSeguridad">
+                <li class="nav-item" id="mnuSeguridad">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon bi bi-speedometer"></i>
+                        <i class="nav-icon bi bi-shield-lock"></i>
                         <p>
                             Seguridad
                             <i class="nav-arrow bi bi-chevron-right"></i>
@@ -50,6 +58,27 @@
                             <a href="{{route('roles.index')}}" class="nav-link" id="itemRole">
                                 <i class="nav-icon bi bi-circle"></i>
                                 <p>Roles</p>
+                            </a>
+                        </li>
+                        @endcan
+                    </ul>
+                </li>
+                @endcanany
+                @canany(['producto-list'])
+                <li class="nav-item" id="mnuAlmacen">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon bi bi-archive-fill"></i>
+                        <p>
+                            Almacén
+                            <i class="nav-arrow bi bi-chevron-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        @can('producto-list')
+                        <li class="nav-item">
+                            <a href="{{route('productos.index')}}" class="nav-link" id="itemProducto">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Productos</p>
                             </a>
                         </li>
                         @endcan
