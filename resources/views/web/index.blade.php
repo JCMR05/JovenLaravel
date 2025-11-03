@@ -63,4 +63,34 @@
     </div>
     </div>
 </section>
+    <!-- About Section (moved from index.html) -->
+    <section class="about-section" id="sobre-nosotros">
+        <div class="container">
+            <div class="section-header text-center mb-4">
+                <h2 class="section-title">Nuestra Historia</h2>
+                <p class="section-subtitle">Somos una panadería familiar dedicada a mantener viva la tradición del pan artesanal,
+                    combinando recetas tradicionales con las mejores técnicas modernas.</p>
+            </div>
+
+            <div class="features-grid row">
+                <div class="feature-card col-md-4 mb-3 text-center">
+                    <div class="feature-icon mb-2"><i class="fas fa-clock fa-2x"></i></div>
+                    <h3>Horneado Diario</h3>
+                    <p>Todos nuestros productos son elaborados frescos cada mañana</p>
+                </div>
+
+                <div class="feature-card col-md-4 mb-3 text-center">
+                    <div class="feature-icon mb-2"><i class="fas fa-heart fa-2x"></i></div>
+                    <h3>Ingredientes Naturales</h3>
+                    <p>Utilizamos solo ingredientes de la más alta calidad, sin conservantes</p>
+                </div>
+
+                <div class="feature-card col-md-4 mb-3 text-center">
+                    <div class="feature-icon mb-2"><i class="fas fa-award fa-2x"></i></div>
+                    <h3>Tradición Artesanal</h3>
+                    <p>Más de 30 años de experiencia en el arte de la panadería</p>
+                </div>
+            </div>
+        </div>
+    </section>
 @endsection
