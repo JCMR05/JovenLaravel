@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\PerfilController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\PedidoController;
@@ -28,6 +29,7 @@ Route::middleware(['auth'])->group(function(){
     Route::patch('usuarios/{usuario}/toggle', [UserController::class, 'toggleStatus'])->name('usuarios.toggle');
     Route::resource('roles', RoleController::class);
     Route::resource('productos', ProductoController::class);
+    Route::resource('categorias', CategoriaController::class);
 
     Route::post('/pedido/realizar', [PedidoController::class, 'realizar'])->name('pedido.realizar');
     Route::get('/perfil/pedidos', [PedidoController::class, 'index'])->name('perfil.pedidos');

@@ -83,6 +83,16 @@
                         </li>
                         @endcan
                     </ul>
+                    <ul class="nav nav-treeview">
+                        @can('producto-list')
+                        <li class="nav-item">
+                            <a href="{{route('categorias.index')}}" class="nav-link" id="itemCategoria">
+                                <i class="nav-icon bi bi-circle"></i>
+                                <p>Categorias</p>
+                            </a>
+                        </li>
+                        @endcan
+                    </ul>
                 </li>
                 @endcanany            
             </ul>
