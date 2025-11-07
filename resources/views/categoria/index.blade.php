@@ -8,12 +8,12 @@
             <div class="col-md-12">
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h3 class="card-title">Productos</h3>
+                        <h3 class="card-title">Categorias</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div>
-                            <form action="{{route('productos.index')}}" method="get">
+                            <form action="{{route('categorias.index')}}" method="get">
                                 <div class="input-group">
                                     <input name="texto" type="text" class="form-control" value="{{$texto}}"
                                         placeholder="Ingrese texto a buscar">
@@ -21,7 +21,7 @@
                                         <button type="submit" class="btn btn-secondary"><i class="fas fa-search"></i>
                                             Buscar</button>
                                         @can('producto-create')
-                                        <a href="{{route('productos.create')}}" class="btn btn-primary"> Nuevo</a>
+                                        <a href="{{route('categorias.create')}}" class="btn btn-primary"> Nuevo</a>
                                         @endcan
                                     </div>
                                 </div>
@@ -40,9 +40,8 @@
                                         <th style="width: 150px">Opciones</th>
                                         <th style="width: 20px">ID</th>
                                         <th>Código</th>
-                                        <th>Nobre</th>
-                                        <th>Precio</th>
-                                        <th>Imagen</th>
+                                        <th>Nombre</th>
+                                        <th>Descripcion</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -55,7 +54,7 @@
                                             <tr class="align-middle">
                                                 <td>
                                                     @can('producto-edit')
-                                                    <a href="{{route('productos.edit', $reg->id)}}" class="btn btn-info btn-sm"><i class="bi bi-pencil-fill"></i></a>&nbsp;
+                                                    <a href="{{route('categorias.edit', $reg->id)}}" class="btn btn-info btn-sm"><i class="bi bi-pencil-fill"></i></a>&nbsp;
                                                     @endcan
                                                     @can('producto-delete')
                                                     <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
@@ -66,17 +65,10 @@
                                                 <td>{{$reg->id}}</td>
                                                 <td>{{$reg->codigo}}</td>
                                                 <td>{{$reg->nombre}}</td>
-                                                <td>{{$reg->precio}}</td>
-                                                <td>
-                                                @if($reg->imagen)
-                                                    <img src="{{ asset('uploads/productos/' . $reg->imagen) }}" alt="{{ $reg->nombre }}" style="max-width: 150px; height: auto;">
-                                                @else
-                                                    <span>Sin imagen</span>
-                                                @endif
-                                                </td>
+                                                <td>{{$reg->descripcion}}</td>
                                             </tr>
                                             @can('producto-delete')
-                                                @include('producto.delete')
+                                                @include('categoria.delete')
                                             @endcan
                                         @endforeach
                                     @endif
@@ -102,6 +94,6 @@
 @push('scripts')
 <script>
     document.getElementById('mnuAlmacen').classList.add('menu-open');
-    document.getElementById('itemProducto').classList.add('active');
+    document.getElementById('itemCategoria').classList.add('active');
 </script>
 @endpush

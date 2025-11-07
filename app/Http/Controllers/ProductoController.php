@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Producto;
+use App\Models\Categoria;
 use App\Http\Requests\ProductoRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Str;
@@ -31,8 +32,9 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        $this->authorize('producto-create'); 
-        return view('producto.action');
+        $this->authorize('producto-create');
+        $categorias=Categoria::all();
+        return view('producto.action', compact('categorias'));
     }
 
     /**
@@ -46,6 +48,7 @@ class ProductoController extends Controller
         $registro->nombre=$request->input('nombre');
         $registro->precio=$request->input('precio');
         $registro->descripcion=$request->input('descripcion');
+        $registro->categorias = $request->categorias;
         $sufijo=strtolower(Str::random(2));
         $image = $request->file('imagen');
         if (!is_null($image)){            

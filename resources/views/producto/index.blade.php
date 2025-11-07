@@ -40,8 +40,9 @@
                                         <th style="width: 150px">Opciones</th>
                                         <th style="width: 20px">ID</th>
                                         <th>Código</th>
-                                        <th>Nobre</th>
+                                        <th>Nombre</th>
                                         <th>Precio</th>
+                                        <th>Categoria</th>
                                         <th>Imagen</th>
                                     </tr>
                                 </thead>
@@ -67,6 +68,7 @@
                                                 <td>{{$reg->codigo}}</td>
                                                 <td>{{$reg->nombre}}</td>
                                                 <td>{{$reg->precio}}</td>
+                                                <td>{{$reg->categoria}}</td>
                                                 <td>
                                                 @if($reg->imagen)
                                                     <img src="{{ asset('uploads/productos/' . $reg->imagen) }}" alt="{{ $reg->nombre }}" style="max-width: 150px; height: auto;">

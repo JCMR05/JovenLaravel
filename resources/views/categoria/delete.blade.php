@@ -2,7 +2,7 @@
     aria-labelledby="exampleModalLabel">
     <div class="modal-dialog">
         <div class="modal-content bg-danger">
-            <form action="{{route('productos.destroy', $reg->id)}}" method="post">
+            <form action="{{route('categorias.destroy', $reg->id)}}" method="post">
                 @csrf
                 @method('DELETE')
                 <div class="modal-header">

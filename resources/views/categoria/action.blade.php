@@ -12,7 +12,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <form action="{{ isset($registro)?route('productos.update', $registro->id) : route('productos.store')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ isset($registro)?route('categorias.update', $registro->id) : route('categorias.store')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @if(isset($registro))
                                 @method('PUT')
@@ -34,14 +34,6 @@
                                         <small class="text-danger">{{$message}}</small>
                                      @enderror
                                 </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="precio" class="form-label">Precio</label>
-                                    <input type="text" class="form-control @error('precio') is-invalid @enderror"
-                                     id="precio" name="precio" value="{{old('precio',  $registro->precio ??'')}}" required>
-                                     @error('precio')
-                                        <small class="text-danger">{{$message}}</small>
-                                     @enderror
-                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-8 mb-3">
@@ -52,24 +44,10 @@
                                         <small class="text-danger">{{$message}}</small>
                                      @enderror
                                 </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="imagen" class="form-label">Imagen</label>
-                                    <input type="file" class="form-control @error('imagen') is-invalid @enderror"
-                                     id="imagen" name="imagen" value="{{old('imagen')}}">
-                                     @error('imagen')
-                                        <small class="text-danger">{{$message}}</small>
-                                     @enderror
-                                     @if(isset($registro) && $registro->imagen)
-                                        <div class="mt-2">
-                                            <img src="{{ asset('uploads/productos/' . $registro->imagen) }}" 
-                                            alt="Imagen actual" style="max-width: 150px; height: auto; border-radius: 8px;">
-                                        </div>
-                                    @endif
-                                </div>
                             </div>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                 <button type="button" class="btn btn-secondary me-md-2"
-                                    onclick="window.location.href='{{route('productos.index')}}'">Cancelar</button>
+                                    onclick="window.location.href='{{route('categorias.index')}}'">Cancelar</button>
                                 <button type="submit" class="btn btn-primary">Guardar</button>
                             </div>
                         </form>

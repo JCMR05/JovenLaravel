@@ -52,6 +52,19 @@
                                         <small class="text-danger">{{$message}}</small>
                                      @enderror
                                 </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Categorias:</label><br>
+                                    @foreach($categorias as $categoria)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="categoria[]"
+                                            value="{{ $categoria->name }}" id="permiso_{{ $categoria->id }}"
+                                            {{ isset($registro) && $registro->hasCategoriaTo($categoria->nombre) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="permiso_{{ $categoria->id }}">
+                                            {{ ucfirst($categoria->nombre) }}
+                                        </label>
+                                    </div>
+                                    @endforeach
+                                </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="imagen" class="form-label">Imagen</label>
                                     <input type="file" class="form-control @error('imagen') is-invalid @enderror"
