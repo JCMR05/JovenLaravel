@@ -68,7 +68,7 @@
                                                 <td>{{$reg->codigo}}</td>
                                                 <td>{{$reg->nombre}}</td>
                                                 <td>{{$reg->precio}}</td>
-                                                <td>{{$reg->categoria}}</td>
+                                                <td>{{ $reg->categorias->pluck('nombre')->implode(', ') }}</td>
                                                 <td>
                                                 @if($reg->imagen)
                                                     <img src="{{ asset('uploads/productos/' . $reg->imagen) }}" alt="{{ $reg->nombre }}" style="max-width: 150px; height: auto;">

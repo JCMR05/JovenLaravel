@@ -31,36 +31,46 @@
 <!-- Section-->
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-1">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            @foreach($productos as $producto)
-            <div class="col mb-5">
-                <div class="card h-100">
-                    <!-- Product image-->
-                    <img class="card-img-top" src="{{asset('uploads/productos/'. $producto->imagen) }}"
-                        alt="{{$producto->nombre}}" />
-                    <!-- Product details-->
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <!-- Product name-->
-                            <h5 class="fw-bolder">{{$producto->nombre}}</h5>
-                            <!-- Product price-->
-                            $ {{number_format($producto->precio, 2)}}
+        @foreach($categorias as $categoria)
+            <div class="mb-4">
+                <h3 class="section-title">{{ $categoria->nombre }}</h3>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    @forelse($categoria->productos as $producto)
+                        <div class="col mb-5">
+                            <div class="card h-100">
+                                <img class="card-img-top" src="{{ asset('uploads/productos/'. $producto->imagen) }}" alt="{{ $producto->nombre }}" />
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <h5 class="fw-bolder">{{ $producto->nombre }}</h5>
+                                        $ {{ number_format($producto->precio, 2) }}
+                                    </div>
+                                </div>
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center">
+                                        <a class="btn btn-outline-dark mt-auto" href="{{ route('web.show', $producto->id) }}">Ver producto</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <!-- Product actions-->
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto"
-                                href="{{route('web.show', $producto->id)}}">Ver
-                                producto</a></div>
-                    </div>
+                    @empty
+                        <div class="col-12">
+                            <p>No hay productos en esta categoría.</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                {{-- Paginación de productos para esta categoría.
+                     Conserva los demás parámetros de la request excepto la propia página de esta categoría. --}}
+                <div class="d-flex justify-content-center">
+                    {{ $categoria->productos->appends(request()->except('page_cat_'.$categoria->id))->links() }}
                 </div>
             </div>
-            @endforeach
+        @endforeach
+
+        {{-- Paginación de categorías (5 por página) --}}
+        <div class="d-flex justify-content-center mt-4">
+            {{ $categorias->appends(request()->except('page'))->links() }}
         </div>
-        <div class="card-footer clearfix">
-            {{ $productos->appends(['search' => request('search'), 'sort' => request('sort')])->links() }}
-        </div>
-    </div>
     </div>
 </section>
     <!-- About Section (moved from index.html) -->

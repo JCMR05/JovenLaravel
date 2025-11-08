@@ -12,12 +12,13 @@ class Categoria extends Model
         'descripcion',
     ];
 
-        public function detalles()
+    public function relaciones()
     {
-        return $this->hasMany(PedidoDetalle::class);
+        return $this->hasMany(CategoriaRelacion::class, 'categoria_id');
     }
-    public function user()
+
+    public function productos()
     {
-        return $this->belongsTo(Producto::class);
+        return $this->belongsToMany(Producto::class, 'categoria_relacion', 'categoria_id', 'producto_id');
     }
 }

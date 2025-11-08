@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Producto;
 use App\Models\Categoria;
 use App\Http\Requests\ProductoRequest;
+use App\Models\CategoriaRelacion;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Str;
 
@@ -18,10 +19,13 @@ class ProductoController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('producto-list'); 
+        $this->authorize('producto-list');
         $texto=$request->input('texto');
-        $registros=Producto::where('nombre', 'like',"%{$texto}%")
-                    ->orWhere('codigo', 'like',"%{$texto}%")
+        $registros=Producto::with('categorias') // <<-- eager load
+                    ->where(function($q) use ($texto) {
+                        $q->where('nombre', 'like',"%{$texto}%")
+                          ->orWhere('codigo', 'like',"%{$texto}%");
+                    })
                     ->orderBy('id', 'desc')
                     ->paginate(10);
         return view('producto.index', compact('registros','texto'));
@@ -33,7 +37,7 @@ class ProductoController extends Controller
     public function create()
     {
         $this->authorize('producto-create');
-        $categorias=Categoria::all();
+        $categorias = Categoria::all();
         return view('producto.action', compact('categorias'));
     }
 
@@ -42,22 +46,26 @@ class ProductoController extends Controller
      */
     public function store(ProductoRequest $request)
     {
-        $this->authorize('producto-create'); 
+        $this->authorize('producto-create');
         $registro = new Producto();
         $registro->codigo=$request->input('codigo');
         $registro->nombre=$request->input('nombre');
         $registro->precio=$request->input('precio');
         $registro->descripcion=$request->input('descripcion');
-        $registro->categorias = $request->categorias;
+
         $sufijo=strtolower(Str::random(2));
         $image = $request->file('imagen');
-        if (!is_null($image)){            
+        if (!is_null($image)){
             $nombreImagen=$sufijo.'-'.$image->getClientOriginalName();
             $image->move('uploads/productos', $nombreImagen);
             $registro->imagen = $nombreImagen;
         }
 
         $registro->save();
+
+        $categorias = $request->input('categorias', []);
+        $registro->categorias()->sync(is_array($categorias) ? array_filter($categorias) : []);
+
         return redirect()->route('productos.index')->with('mensaje', 'Registro '.$registro->nombre. '  agregado correctamente');
     }
 
@@ -74,9 +82,11 @@ class ProductoController extends Controller
      */
     public function edit(string $id)
     {
-        $this->authorize('producto-edit'); 
+        $this->authorize('producto-edit');
         $registro=Producto::findOrFail($id);
-        return view('producto.action', compact('registro'));
+        $categorias = Categoria::all();
+        $selectedCategorias = CategoriaRelacion::where('producto_id', $id)->pluck('categoria_id')->toArray();
+        return view('producto.action', compact('registro','categorias','selectedCategorias'));
     }
 
     /**
@@ -84,7 +94,7 @@ class ProductoController extends Controller
      */
     public function update(ProductoRequest $request, $id)
     {
-        $this->authorize('producto-edit'); 
+        $this->authorize('producto-edit');
         $registro=Producto::findOrFail($id);
         $registro->codigo=$request->input('codigo');
         $registro->nombre=$request->input('nombre');
@@ -92,7 +102,7 @@ class ProductoController extends Controller
         $registro->descripcion=$request->input('descripcion');
         $sufijo=strtolower(Str::random(2));
         $image = $request->file('imagen');
-        if (!is_null($image)){            
+        if (!is_null($image)){
             $nombreImagen=$sufijo.'-'.$image->getClientOriginalName();
             $image->move('uploads/productos', $nombreImagen);
             $old_image = 'uploads/productos/'.$registro->imagen;
@@ -103,6 +113,9 @@ class ProductoController extends Controller
         }
 
         $registro->save();
+
+        $categorias = $request->input('categorias', []);
+        $registro->categorias()->sync(is_array($categorias) ? array_filter($categorias) : []);
 
         return redirect()->route('productos.index')->with('mensaje', 'Registro '.$registro->nombre. '  actualizado correctamente');
     }
@@ -118,6 +131,10 @@ class ProductoController extends Controller
         if (file_exists($old_image)) {
             @unlink($old_image);
         }
+
+        // eliminar relaciones
+        CategoriaRelacion::where('producto_id', $registro->id)->delete();
+
         $registro->delete();
         return redirect()->route('productos.index')->with('mensaje', $registro->nombre. ' eliminado correctamente.');
     }

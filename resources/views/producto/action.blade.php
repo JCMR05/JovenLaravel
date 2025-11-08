@@ -54,16 +54,19 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Categorias:</label><br>
-                                    @foreach($categorias as $categoria)
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="categoria[]"
-                                            value="{{ $categoria->name }}" id="permiso_{{ $categoria->id }}"
-                                            {{ isset($registro) && $registro->hasCategoriaTo($categoria->nombre) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="permiso_{{ $categoria->id }}">
-                                            {{ ucfirst($categoria->nombre) }}
-                                        </label>
+                                    <label>Categorías</label>
+                                    <div>
+                                        @foreach($categorias as $cat)
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox"
+                                                    name="categorias[]" id="cat{{ $cat->id }}" value="{{ $cat->id }}"
+                                                    {{-- marcar si viene old() o si el registro ya la tiene --}}
+                                                    @if( (old('categorias') && in_array($cat->id, old('categorias'))) || (isset($registro) && $registro->hasCategoriaTo($cat->id)) ) checked @endif
+                                                >
+                                                <label class="form-check-label" for="cat{{ $cat->id }}">{{ $cat->nombre }}</label>
+                                            </div>
+                                        @endforeach
                                     </div>
-                                    @endforeach
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="imagen" class="form-label">Imagen</label>
