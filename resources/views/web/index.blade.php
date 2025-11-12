@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    <!-- Collapse: filter options (categories added by admin) -->
+    <!-- Collapse: filter options -->
     <div class="container px-4 px-lg-5">
         <div class="collapse mt-2" id="filterOptions">
             <div class="card card-body">
@@ -58,51 +58,87 @@
         </div>
     </div>
 </form>
-<!-- Section-->
+
+<!-- Section: si hay búsqueda mostrar solo productos -->
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-1">
-        @foreach($categorias as $categoria)
-            <div class="mb-4">
-                <h3 class="section-title">{{ $categoria->nombre }}</h3>
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    @forelse($categoria->productos as $producto)
-                        <div class="col mb-5">
-                            <div class="card h-100">
-                                <img class="card-img-top" src="{{ asset('uploads/productos/'. $producto->imagen) }}" alt="{{ $producto->nombre }}" />
-                                <div class="card-body p-4">
-                                    <div class="text-center">
-                                        <h5 class="fw-bolder">{{ $producto->nombre }}</h5>
-                                        $ {{ number_format($producto->precio, 2) }}
-                                    </div>
+        @if(!empty($productos) || request('search'))
+            @php
+                $productos = $productos ?? (isset($productos) ? $productos : \App\Models\Producto::where('nombre','like','%'.request('search').'%')->paginate(8));
+            @endphp
+
+            <h3 class="mb-4">Resultados de búsqueda: "{{ request('search') }}"</h3>
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                @forelse($productos as $producto)
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <img class="card-img-top" src="{{ $producto->imagen && filter_var($producto->imagen, FILTER_VALIDATE_URL) ? $producto->imagen : asset('uploads/productos/'. $producto->imagen) }}" alt="{{ $producto->nombre }}" />
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <h5 class="fw-bolder">{{ $producto->nombre }}</h5>
+                                    $ {{ number_format($producto->precio, 2) }}
                                 </div>
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center">
-                                        <a class="btn btn-outline-dark mt-auto" href="{{ route('web.show', $producto->id) }}">Ver producto</a>
-                                    </div>
+                            </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center">
+                                    <a class="btn btn-outline-dark mt-auto" href="{{ route('web.show', $producto->id) }}">Ver producto</a>
                                 </div>
                             </div>
                         </div>
-                    @empty
-                        <div class="col-12">
-                            <p>No hay productos en esta categoría.</p>
-                        </div>
-                    @endforelse
-                </div>
-
-                {{-- Paginación de productos para esta categoría.
-                     Conserva los demás parámetros de la request excepto la propia página de esta categoría. --}}
-                <div class="d-flex justify-content-center">
-                    {{ $categoria->productos->appends(request()->except('page_cat_'.$categoria->id))->links() }}
-                </div>
+                    </div>
+                @empty
+                    <div class="col-12">
+                        <p>No se encontraron productos.</p>
+                    </div>
+                @endforelse
             </div>
-        @endforeach
 
-        {{-- Paginación de categorías (5 por página) --}}
-        <div class="d-flex justify-content-center mt-4">
-            {{ $categorias->appends(request()->except('page'))->links() }}
-        </div>
+            <div class="d-flex justify-content-center">
+                {{ $productos->links() }}
+            </div>
+        @else
+            {{-- Vista por categorías (sin búsqueda) --}}
+            @foreach($categorias as $categoria)
+                <div class="mb-4">
+                    <h3 class="section-title">{{ $categoria->nombre }}</h3>
+                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                        @forelse($categoria->productos as $producto)
+                            <div class="col mb-5">
+                                <div class="card h-100">
+                                    <img class="card-img-top" src="{{ asset('uploads/productos/'. $producto->imagen) }}" alt="{{ $producto->nombre }}" />
+                                    <div class="card-body p-4">
+                                        <div class="text-center">
+                                            <h5 class="fw-bolder">{{ $producto->nombre }}</h5>
+                                            $ {{ number_format($producto->precio, 2) }}
+                                        </div>
+                                    </div>
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                        <div class="text-center">
+                                            <a class="btn btn-outline-dark mt-auto" href="{{ route('web.show', $producto->id) }}">Ver producto</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="col-12">
+                                <p>No hay productos en esta categoría.</p>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        {{ $categoria->productos->appends(request()->except('page_cat_'.$categoria->id))->links() }}
+                    </div>
+                </div>
+            @endforeach
+
+            <div class="d-flex justify-content-center mt-4">
+                {{ $categorias->appends(request()->except('page'))->links() }}
+            </div>
+        @endif
     </div>
 </section>
+
     <!-- About Section (moved from index.html) -->
     <section class="about-section" id="sobre-nosotros">
         <div class="container">

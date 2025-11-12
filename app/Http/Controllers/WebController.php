@@ -14,31 +14,54 @@ class WebController extends Controller
         $sort = $request->input('sort');
         $selectedCategories = $request->input('categories', []);
 
-        // Si hay categorías seleccionadas por el usuario, mostrar solo esas categorías (aunque no tengan productos)
+        // Filtro para panel de categorías (todos los items para opciones)
+        $categoriasFiltro = Categoria::orderBy('nombre')->get();
+
+        // Si hay término de búsqueda, mostrar solo productos (no categorías)
+        if (!empty($search)) {
+            $productosQuery = Producto::with('categorias')
+                ->where(function($q) use ($search) {
+                    $q->where('nombre', 'like', "%{$search}%")
+                      ->orWhere('descripcion', 'like', "%{$search}%")
+                      ->orWhere('codigo', 'like', "%{$search}%");
+                });
+
+            // Orden
+            if ($sort === 'priceAsc') {
+                $productosQuery->orderBy('precio', 'asc');
+            } elseif ($sort === 'priceDesc') {
+                $productosQuery->orderBy('precio', 'desc');
+            } else {
+                $productosQuery->orderBy('id', 'desc');
+            }
+
+            // Mostrar 8 productos por página (4 más que antes)
+            $productos = $productosQuery->paginate(8)->appends($request->query());
+
+            // Pasar productos a la vista; no pasamos $categorias para ocultar la vista por categorías
+            return view('web.index', compact('productos', 'categoriasFiltro', 'search', 'sort', 'selectedCategories'));
+        }
+
+        // Sin búsqueda: mostrar categorías con sus productos paginados por categoría (4 por página)
         if (!empty($selectedCategories)) {
             $categorias = Categoria::whereIn('id', (array) $selectedCategories)
                 ->orderBy('nombre')
                 ->paginate(4);
         } else {
-            // traer categorías que tengan productos (filtrados por búsqueda si aplica)
             $categorias = Categoria::whereHas('productos', function($q) use ($search) {
                     if (!empty($search)) {
                         $q->where('nombre', 'like', "%{$search}%");
                     }
                 })
                 ->orderBy('nombre')
-                ->paginate(4); // <- límite de 5 categorías por página
+                ->paginate(4);
         }
 
-        // para cada categoría cargar sus productos paginados (10 por página)
         foreach ($categorias as $categoria) {
             $productosQuery = $categoria->productos()
                 ->when(!empty($search), function($q) use ($search) {
                     $q->where('nombre', 'like', "%{$search}%");
                 });
-
-            // Además, si se seleccionaron categorías, ya estamos iterando solo las seleccionadas.
-            // No hace falta filtrar productos por categoría aquí porque usamos la relación del modelo.
 
             if ($sort === 'priceAsc') {
                 $productosQuery->orderBy('precio', 'asc');
@@ -48,15 +71,11 @@ class WebController extends Controller
                 $productosQuery->orderBy('id', 'desc');
             }
 
-            // paginador por categoría; usa un nombre de página distinto para cada categoría
             $pageName = 'page_cat_' . $categoria->id;
             $categoria->setRelation('productos', $productosQuery->paginate(4, ['*'], $pageName));
         }
 
-        // además pasar todas las categorías para el panel de filtros (incluye categorías sin productos)
-        $categoriasFiltro = Categoria::orderBy('nombre')->get();
-
-        return view('web.index', compact('categorias', 'categoriasFiltro'));
+        return view('web.index', compact('categorias', 'categoriasFiltro', 'search', 'sort', 'selectedCategories'));
     }
 
     public function show($id){
