@@ -53,8 +53,7 @@
                                      @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Categorias:</label><br>
-                                    <label>Categorías</label>
+                                    <label class="form-label">Categorias:</label>
                                     <div>
                                         @foreach($categorias as $cat)
                                             <div class="form-check form-check-inline">

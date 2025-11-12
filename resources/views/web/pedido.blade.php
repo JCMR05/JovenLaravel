@@ -16,9 +16,9 @@
                             <div class="col-md-3 text-end"><strong>Subtotal</strong></div>
                         </div>
                     </div>
-                    <div class="card-body" id="cartItems">
+                    <div class="card-body" >
                         @forelse($carrito as $id => $item)
-                        <!-- Product-->
+                        <!-- Producto-->
                         <div class="row align-items-center mb-3 cart-item">
                             <!--Nombre y código-->
                             <div class="col-md-5 d-flex align-items-center">

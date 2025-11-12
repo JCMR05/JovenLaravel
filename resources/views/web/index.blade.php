@@ -9,6 +9,10 @@
                 <div class="input-group">
                     <input type="text" class="form-control" id="searchInput" placeholder="Buscar productos..."
                         aria-label="Buscar productos" name="search" value="{{request('search')}}">
+                    <button class="btn btn-outline-dark" type="button" id="filterButton" data-bs-toggle="collapse"
+                        data-bs-target="#filterOptions" aria-expanded="false" aria-controls="filterOptions">
+                        <i class="bi bi-funnel"></i> Filtros
+                    </button>
                     <button class="btn btn-outline-dark" type="submit" id="searchButton">
                         <i class="bi bi-search"></i> Buscar
                     </button>
@@ -23,6 +27,32 @@
                         <option value="priceDesc" {{ request('sort') == 'priceDesc' ? 'selected' : '' }}>Precio: mayor a
                             menor</option>
                     </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Collapse: filter options (categories added by admin) -->
+    <div class="container px-4 px-lg-5">
+        <div class="collapse mt-2" id="filterOptions">
+            <div class="card card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p class="mb-2"><strong>Categorías</strong></p>
+                        <div class="d-flex flex-wrap">
+                            @foreach($categoriasFiltro ?? collect() as $catOption)
+                                <div class="form-check me-3">
+                                    <input class="form-check-input" type="checkbox" value="{{ $catOption->id }}" id="cat-{{ $catOption->id }}" name="categories[]" {{ in_array($catOption->id, (array) request('categories', [])) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="cat-{{ $catOption->id }}">{{ $catOption->nombre }}</label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center justify-content-end">
+                        <div>
+                            <button type="submit" class="btn btn-primary me-2">Aplicar filtros</button>
+                            <a href="{{ route('web.index', array_merge(request()->except('categories', 'page'), ['categories' => []])) }}" class="btn btn-outline-secondary">Limpiar filtros</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -104,3 +134,5 @@
         </div>
     </section>
 @endsection
+
+
