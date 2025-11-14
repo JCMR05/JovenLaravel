@@ -5858,6 +5858,141 @@ textarea.form-control-lg {
   }
 }
 
+/* ...existing code... */
+/* Productos: panel y animaciones movidas desde index.blade.php */
+.products-panel { 
+    overflow: visible; 
+    position: relative;
+}
+.panel-content { 
+    transition: transform 400ms ease, opacity 400ms ease; 
+    overflow: hidden;
+}
+.panel-content.slide-out-left { 
+    transform: translateX(-30px); 
+    opacity: 0; 
+}
+.panel-content.slide-in-right { 
+    transform: translateX(30px); 
+    opacity: 0; 
+}
+.panel-content.slide-in { 
+    transform: translateX(0); 
+    opacity: 1; 
+}
+.btn-side { 
+    transition: all 300ms ease; 
+}
+.btn-side:hover {
+    background-color: #e9ecef;
+    transform: scale(1.1);
+}
+.btn-side:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.paginator-wrapper .pagination { 
+    margin: 0; 
+}
+
+/* Eliminar subrayado/efecto azul en enlaces-botón dentro del panel de productos */
+.products-panel a.btn,
+.products-panel .card a {
+    text-decoration: none !important;
+    -webkit-text-decoration-skip-ink: none;
+}
+
+/* Evitar outline/box-shadow al hover/focus/active */
+.products-panel a.btn:hover,
+.products-panel a.btn:focus,
+.products-panel a.btn:active,
+.products-panel .card a:hover,
+.products-panel .card a:focus,
+.products-panel .card a:active {
+    text-decoration: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Opcional: quitar highlight en móviles/touch */
+.products-panel a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Hacer que el "outline" / borde que aparece al hover/focus tenga el mismo tono naranja */
+.btn-primary-custom,
+.btn-primary-custom:hover,
+.btn-primary-custom:focus,
+.btn-primary-custom:focus-visible,
+.btn-primary-custom:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Hover: mantener pequeño lift pero sin borde azul */
+.btn-primary-custom:hover {
+    border-color: #c75a00 !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+/* Focus / active: usar halo naranja oscuro en lugar de halo azul */
+.btn-primary-custom:focus,
+.btn-primary-custom:focus-visible,
+.btn-primary-custom:active {
+    background-color: #c75a00 !important;
+    border-color: #c75a00 !important;
+    color: #fff !important;
+    box-shadow: 0 0 0 0.28rem rgba(199,90,0,0.18) !important;
+    outline: none !important;
+}
+
+/* Estilo personalizado para el botón "Ver Productos" */
+.btn-primary-custom {
+    transition: background-color 160ms ease, border-color 160ms ease, transform 120ms ease, box-shadow 120ms ease;
+}
+
+/* Hover: pequeña elevación */
+.btn-primary-custom:hover {
+    transform: translateY(-1px);
+}
+
+/* Estado activo/focus/click: naranja oscuro */
+.btn-primary-custom:active,
+.btn-primary-custom:focus,
+.btn-primary-custom:focus-visible {
+    background-color: #c75a00 !important;    /* naranja oscuro */
+    border-color: #c75a00 !important;
+    color: #fff !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Asegurar que no aparezca subrayado ni línea azul alrededor al hacer hover/focus */
+.hero-buttons .btn,
+.hero-buttons a.btn,
+.products-panel a.btn {
+    text-decoration: none !important;
+    -webkit-text-decoration-skip-ink: none;
+}
+.hero-buttons .btn:hover,
+.hero-buttons .btn:focus,
+.hero-buttons .btn:active,
+.products-panel a.btn:hover,
+.products-panel a.btn:focus,
+.products-panel a.btn:active {
+    text-decoration: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Opcional: evitar highlight en touch */
+.hero-buttons a,
+.products-panel a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ...existing code... */
+
 .carousel-control-prev,
 .carousel-control-next {
   position: absolute;

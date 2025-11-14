@@ -1,62 +1,3 @@
-// Scripts merged from the design's script.js
-// Products Data
-const products = [
-	{
-		id: 1,
-		name: "Pan Artesanal",
-		description: "Pan rústico con masa madre natural",
-		price: 4.50,
-		image: "https://images.unsplash.com/photo-1627308593341-d886acdc06a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpc2FuJTIwYnJlYWQlMjBiYWtlcnl8ZW58MXx8fHwxNzYxNjg1ODMzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-		category: "Panes",
-		isNew: true
-	},
-	{
-		id: 2,
-		name: "Croissants",
-		description: "Croissants de mantequilla recién horneados",
-		price: 2.80,
-		image: "https://images.unsplash.com/photo-1654923064797-26af6b093027?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmcmVzaCUyMGNyb2lzc2FudHMlMjBwYXN0cnl8ZW58MXx8fHwxNzYxNzQ0NDMzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-		category: "Bollería",
-		isNew: false
-	},
-	{
-		id: 3,
-		name: "Pan de Masa Madre",
-		description: "Pan tradicional con fermentación lenta",
-		price: 5.20,
-		image: "https://images.unsplash.com/photo-1597604391235-a7429b4b350c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb3VyZG91Z2glMjBicmVhZHxlbnwxfHx8fDE3NjE3Mjg0MzN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-		category: "Panes",
-		isNew: true
-	},
-	{
-		id: 4,
-		name: "Tarta de Frutas",
-		description: "Deliciosa tarta con frutas de temporada",
-		price: 18.50,
-		image: "https://images.unsplash.com/photo-1706463996554-6c6318946b3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYWtlJTIwcGFzdHJ5JTIwZGVzc2VydHxlbnwxfHx8fDE3NjE3ODE1MDR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-		category: "Repostería",
-		isNew: false
-	},
-	{
-		id: 5,
-		name: "Baguette",
-		description: "Baguette francesa tradicional",
-		price: 3.20,
-		image: "https://images.unsplash.com/photo-1686233964668-45a34531b750?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWd1ZXR0ZSUyMGZyZW5jaCUyMGJyZWFkfGVufDF8fHx8MTc2MTc4MTUwNHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-		category: "Panes",
-		isNew: false
-	},
-	{
-		id: 6,
-		name: "Panecillos Integrales",
-		description: "Pack de 6 panecillos de harina integral",
-		price: 4.00,
-		image: "https://images.unsplash.com/photo-1627308593341-d886acdc06a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpc2FuJTIwYnJlYWQlMjBiYWtlcnl8ZW58MXx8fHwxNzYxNjg1ODMzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-		category: "Panes",
-		isNew: false
-	}
-];
-
 // Cart State
 let cart = [];
 let currentFilter = 'all';
@@ -554,3 +495,133 @@ function initFooterSlice(){
 	// also update on resize
 	window.addEventListener('resize', throttle(updateFooterButtons, 200));
 }
+
+/* ============================
+   Product panels: AJAX paging + smooth slide animation
+   ============================ */
+function waitTransitionEnd(el, timeout = 800) {
+    return new Promise(resolve => {
+        let finished = false;
+        function done() {
+            if (finished) return;
+            finished = true;
+            el.removeEventListener('transitionend', done);
+            clearTimeout(timer);
+            resolve();
+        }
+        const timer = setTimeout(() => { done(); }, timeout + 50);
+        el.addEventListener('transitionend', done);
+    });
+}
+
+function initProductPanels() {
+    document.querySelectorAll('.products-panel').forEach(panel => {
+        const content = panel.querySelector('.panel-content');
+        const prevBtn = panel.querySelector('.btn-prev');
+        const nextBtn = panel.querySelector('.btn-next');
+
+        if (!content || !prevBtn || !nextBtn) return;
+
+        function updateSideButtons() {
+            const pagLinks = panel.querySelectorAll('.paginator-wrapper a');
+            let prevUrl = null, nextUrl = null;
+            pagLinks.forEach(a => {
+                const rel = a.getAttribute('rel');
+                if (rel === 'prev') prevUrl = a.href;
+                if (rel === 'next') nextUrl = a.href;
+            });
+            prevBtn.style.display = prevUrl ? 'flex' : 'none';
+            nextBtn.style.display = nextUrl ? 'flex' : 'none';
+            prevBtn.dataset.targetUrl = prevUrl || '';
+            nextBtn.dataset.targetUrl = nextUrl || '';
+            prevBtn.disabled = !prevUrl;
+            nextBtn.disabled = !nextUrl;
+        }
+
+        async function ajaxNavigate(url, direction = 'next') {
+            if (!url) return;
+            prevBtn.disabled = true;
+            nextBtn.disabled = true;
+
+            // Out animation
+            content.classList.add('animating');
+            content.classList.add(direction === 'next' ? 'slide-out-left' : 'slide-out-right');
+            await waitTransitionEnd(content, 700);
+
+            // Fetch HTML
+            let text;
+            try {
+                const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' }});
+                text = await res.text();
+            } catch (e) {
+                window.location.href = url; return;
+            }
+
+            const tmp = document.createElement('div');
+            tmp.innerHTML = text;
+
+            // Determine correct replacement panel-content in response
+            let newContentEl = null;
+            const categorySection = panel.closest('.category-section');
+            if (categorySection) {
+                const currentPanels = Array.from(document.querySelectorAll('.category-section .products-panel'));
+                const idx = currentPanels.indexOf(panel);
+                const responsePanels = Array.from(tmp.querySelectorAll('.category-section .products-panel'));
+                if (responsePanels[idx]) newContentEl = responsePanels[idx].querySelector('.panel-content');
+            } else {
+                newContentEl = tmp.querySelector('.products-panel .panel-content');
+            }
+
+            if (!newContentEl) { window.location.href = url; return; }
+
+            // Replace content and prepare entry animation
+            content.innerHTML = newContentEl.innerHTML;
+            content.classList.remove('slide-out-left', 'slide-out-right');
+
+            // Set initial off-screen class
+            content.classList.add(direction === 'next' ? 'slide-in-from-right' : 'slide-in-from-left');
+
+            // Force reflow then animate to center
+            void content.offsetWidth;
+            content.classList.add('slide-to-center');
+
+            await waitTransitionEnd(content, 700);
+
+            // cleanup
+            content.classList.remove('animating', 'slide-in-from-right', 'slide-in-from-left', 'slide-to-center');
+            // rebind hidden paginator links inside replaced content so updateSideButtons can find new links if any
+            bindPaginationLinks(panel);
+            updateSideButtons();
+        }
+
+        function bindPaginationLinks(root) {
+            const links = root.querySelectorAll('.paginator-wrapper a');
+            links.forEach(a => {
+                a.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.href;
+                    const rel = this.getAttribute('rel');
+                    ajaxNavigate(url, rel === 'prev' ? 'prev' : 'next');
+                });
+            });
+        }
+
+        // side buttons
+        prevBtn.addEventListener('click', () => {
+            const url = prevBtn.dataset.targetUrl;
+            if (url) ajaxNavigate(url, 'prev');
+        });
+        nextBtn.addEventListener('click', () => {
+            const url = nextBtn.dataset.targetUrl;
+            if (url) ajaxNavigate(url, 'next');
+        });
+
+        bindPaginationLinks(panel);
+        updateSideButtons();
+    });
+}
+
+// Inicializar en DOMContentLoaded (ya hay otros listeners en este archivo, añadir otro no rompe)
+document.addEventListener('DOMContentLoaded', function(){
+    if (typeof initProductPanels === 'function') initProductPanels();
+});
