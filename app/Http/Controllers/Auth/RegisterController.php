@@ -4,32 +4,36 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\UserRequest;
-
+use App\Models\User;
 
 class RegisterController extends Controller
 {
-    public function showRegistroForm(){
+    public function create()
+    {
         return view('autenticacion.registro');
     }
 
-    public function registrar(UserRequest $request){
-        $usuario = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-            'activo' => 1, // Activar automáticamente
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email:rfc,dns|max:255|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        $clienteRol=Role::where('name','cliente')->first();
-        if($clienteRol){
-            $usuario->assignRole($clienteRol);
-        }
-        Auth::login($usuario);
-        return redirect()->route('dashboard')->with('mensaje', 'Registro exitoso. ¡Bienvenido!');
+        $user = \App\Models\User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
+            // Asegura que NO sea admin
+            'is_admin' => 0, // ajusta al nombre real del campo si existe
+            'rol' => 'usuario', // o 'cliente', según tu esquema
+        ]);
+
+        \Illuminate\Support\Facades\Auth::login($user);
+
+        return redirect('/'); 
     }
 }

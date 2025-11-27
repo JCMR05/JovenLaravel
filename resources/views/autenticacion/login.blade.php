@@ -52,10 +52,10 @@
       </div>
       <!--end::Row-->
     </form>
+    <a href="{{ route('registro.create') }}">¿No tienes cuenta? Regístrate</a>
     <!-- /.social-auth-links -->
   </div>
   <!-- /.login-card-body -->
 </div>
 @endsection
 
-      

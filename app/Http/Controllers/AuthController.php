@@ -27,4 +27,13 @@ class AuthController extends Controller
         }
         return back()->with('error', 'Las credenciales no son correctas')->withInput();
     }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return redirect('/'); // Redirige al índice
+    }
 }

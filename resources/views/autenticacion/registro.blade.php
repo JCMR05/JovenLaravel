@@ -41,7 +41,7 @@
       </div>
       <div class="input-group mb-1">
         <div class="form-floating">
-          <input id="loginPassword" type="text" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="" />
+          <input id="loginPassword" type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="" />
           <label for="loginPassword">Password</label>
         </div>
         <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
@@ -51,7 +51,7 @@
       </div>
       <div class="input-group mb-1">
         <div class="form-floating">
-          <input id="password_confirmation" type="text" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="" />
+          <input id="password_confirmation" type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="" />
           <label for="password_confirmation">Confirme su password</label>
         </div>
         <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
@@ -77,4 +77,3 @@
 </div>
 @endsection
 
-      
