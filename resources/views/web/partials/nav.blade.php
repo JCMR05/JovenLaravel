@@ -18,6 +18,9 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="{{ route('perfil') }}">Mi Perfil</a></li>
+                        @can ( "producto-list")
+                        <li><a class="dropdown-item" href="{{ route('dashboard') }}">Panel Administrador</a></li>
+                        @endcan
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
