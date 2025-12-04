@@ -1,6 +1,5 @@
 @extends('web.app')
-@section('header')
-@endsection
+
 @section('contenido')
 <form method="GET" action="{{route('web.index')}}">
     <div class="container px-4 px-lg-5 mt-4">
