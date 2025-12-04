@@ -1,5 +1,6 @@
 @extends('web.app')
-
+@section('header')
+@endsection
 @section('contenido')
 <form method="GET" action="{{route('web.index')}}">
     <div class="container px-4 px-lg-5 mt-4">
@@ -68,74 +69,111 @@
             @endphp
 
             <!-- Panel único para búsqueda -->
-            <div class="search-results" style="background: #ffffffff; border-radius: 1rem; padding: 2rem;">
-                <h3 class="mb-4">Resultados de búsqueda: "{{ request('search') }}"</h3>
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    @forelse($productos as $producto)
-                        <div class="col mb-5">
-                            <div class="card h-100">
-                                <img class="card-img-top" src="{{ $producto->imagen && filter_var($producto->imagen, FILTER_VALIDATE_URL) ? $producto->imagen : asset('uploads/productos/'. $producto->imagen) }}" alt="{{ $producto->nombre }}" />
-                                <div class="card-body p-4">
-                                    <div class="text-center">
-                                        <h5 class="fw-bolder">{{ $producto->nombre }}</h5>
-                                        $ {{ number_format($producto->precio, 2) }}
+            <div class="products-panel position-relative" style="background: #ece6e6; border-radius: 1rem; padding: 2rem; display: flex; align-items: center; gap: 2rem;">
+                
+                <!-- Botón Anterior -->
+                <button class="btn-side btn-prev btn btn-outline-dark" 
+                        style="flex-shrink: 0; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; display: none; cursor: pointer;">
+                    &#10094;
+                </button>
+
+                <!-- Contenedor de productos -->
+                <div class="panel-content flex-grow-1" style="min-width: 0;">
+                    <h3 class="mb-4">Resultados de búsqueda: "{{ request('search') }}"</h3>
+                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                        @forelse($productos as $producto)
+                            <div class="col mb-5">
+                                <div class="card h-100">
+                                    <img class="card-img-top" src="{{ $producto->imagen && filter_var($producto->imagen, FILTER_VALIDATE_URL) ? $producto->imagen : asset('uploads/productos/'. $producto->imagen) }}" alt="{{ $producto->nombre }}" />
+                                    <div class="card-body p-4">
+                                        <div class="text-center">
+                                            <h5 class="fw-bolder">{{ $producto->nombre }}</h5>
+                                            $ {{ number_format($producto->precio, 2) }}
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center">
-                                        <a class="btn btn-outline-dark mt-auto" href="{{ route('web.show', $producto->id) }}">Ver producto</a>
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                        <div class="text-center">
+                                            <a class="btn btn-outline-dark mt-auto" href="{{ route('web.show', $producto->id) }}">Ver producto</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @empty
-                        <div class="col-12">
-                            <p>No se encontraron productos.</p>
-                        </div>
-                    @endforelse
-                </div>
-                <div class="mt-4">
-                    {{ $productos->links() }}
-                </div>
-            </div>
+                        @empty
+                            <div class="col-12">
+                                <p>No se encontraron productos.</p>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    <!-- Paginador oculto (solo para extraer URLs) -->
+                    <div class="paginator-wrapper d-none">
+                        {{ $productos->links() }}
+                    </div>
+                </div> <!-- .panel-content -->
+
+                <!-- Botón Siguiente -->
+                <button class="btn-side btn-next btn btn-outline-dark" 
+                        style="flex-shrink: 0; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; display: none; cursor: pointer;">
+                    &#10095;
+                </button>
+            </div> <!-- .products-panel -->
 
         @else
             {{-- Vista por categorías (sin búsqueda) --}}
-             @foreach($categorias as $categoria)
+            @foreach($categorias as $categoria)
                 <!-- Panel para cada categoría -->
                 <div class="category-section mb-5">
                     <h3 class="section-title mb-4">{{ $categoria->nombre }}</h3>
-                    <div class="category-products" style="background: #ece6e6; border-radius: 1rem; padding: 2rem;">
-                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                            @forelse($categoria->productos as $producto)
-                                <div class="col mb-5">
-                                    <div class="card h-100">
-                                        <img class="card-img-top" src="{{ asset('uploads/productos/'. $producto->imagen) }}" alt="{{ $producto->nombre }}" />
-                                        <div class="card-body p-4">
-                                            <div class="text-center">
-                                                <h5 class="fw-bolder">{{ $producto->nombre }}</h5>
-                                                $ {{ number_format($producto->precio, 2) }}
+                    
+                    <div class="products-panel position-relative" style="background: #ece6e6; border-radius: 1rem; padding: 2rem; display: flex; align-items: center; gap: 2rem;">
+                        
+                        <!-- Botón Anterior por categoría -->
+                        <button class="btn-side btn-prev btn btn-outline-dark" 
+                                style="flex-shrink: 0; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; display: none; cursor: pointer;">
+                            &#10094;
+                        </button>
+
+                        <!-- Contenedor de productos por categoría -->
+                        <div class="panel-content flex-grow-1" style="min-width: 0;">
+                            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                                @forelse($categoria->productos as $producto)
+                                    <div class="col mb-5">
+                                        <div class="card h-100">
+                                            <img class="card-img-top" src="{{ asset('uploads/productos/'. $producto->imagen) }}" alt="{{ $producto->nombre }}" />
+                                            <div class="card-body p-4">
+                                                <div class="text-center">
+                                                    <h5 class="fw-bolder">{{ $producto->nombre }}</h5>
+                                                    $ {{ number_format($producto->precio, 2) }}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                            <div class="text-center">
-                                                <a class="btn btn-outline-dark mt-auto" href="{{ route('web.show', $producto->id) }}">Ver producto</a>
+                                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                                <div class="text-center">
+                                                    <a class="btn btn-outline-dark mt-auto" href="{{ route('web.show', $producto->id) }}">Ver producto</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            @empty
-                                <div class="col-12">
-                                    <p>No hay productos en esta categoría.</p>
-                                </div>
-                            @endforelse
-                        </div>
-                        <div class="mt-4">
-                            {{ $categoria->productos->appends(request()->except('page_cat_'.$categoria->id))->links() }}
-                        </div>
-                    </div>
-                </div>
-             @endforeach
+                                @empty
+                                    <div class="col-12">
+                                        <p>No hay productos en esta categoría.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+
+                            <!-- Paginador oculto para cada categoría -->
+                            <div class="paginator-wrapper d-none">
+                                {{ $categoria->productos->appends(request()->except('page_cat_'.$categoria->id))->links() }}
+                            </div>
+                        </div> <!-- .panel-content -->
+
+                        <!-- Botón Siguiente por categoría -->
+                        <button class="btn-side btn-next btn btn-outline-dark" 
+                                style="flex-shrink: 0; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; display: none; cursor: pointer;">
+                            &#10095;
+                        </button>
+                    </div> <!-- .products-panel -->
+                </div> <!-- .category-section -->
+            @endforeach
         @endif
     </div>
 </section>
@@ -148,7 +186,9 @@
 <!-- Cargar CSS centralizado -->
 <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 
-<!-- Se eliminó el JS del carrusel (scripts.js) -->
+<!-- Reemplazado: la lógica JS ahora está en public/js/scripts.js -->
+<script src="{{ asset('js/scripts.js') }}"></script>
+
     <!-- About Section (moved from index.html) -->
     <section class="about-section" id="sobre-nosotros">
         <div class="container">
