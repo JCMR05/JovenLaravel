@@ -14,7 +14,10 @@ use App\Http\Controllers\WebController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\PedidoController;
 
-Route::get('/', [WebController::class, 'index'])->name('web.index');
+// Ruta principal
+Route::get('/', [WebController::class, 'index'])->name('home');
+Route::get('/web', [WebController::class, 'index'])->name('web.index');
+
 Route::get('/producto/{id}', [WebController::class, 'show'])->name('web.show');
 
 Route::get('/carrito', [CarritoController::class, 'mostrar'])->name('carrito.mostrar');
@@ -39,13 +42,21 @@ Route::middleware(['auth'])->group(function(){
         return view('dashboard');
     })->name('dashboard');
 
-    Route::post('logout', function(){
-        Auth::logout();
-        return redirect('/login');
-    })->name('logout');
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/perfil', [PerfilController::class, 'edit'])->name('perfil.edit');
     Route::put('/perfil', [PerfilController::class, 'update'])->name('perfil.update');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/mi-perfil', [WebController::class, 'perfil'])->name('perfil');
+    Route::put('/mi-perfil', [WebController::class, 'perfilUpdate'])->name('perfil.update');
+});
+
+// Registro visible para no autenticados
+Route::middleware('guest')->group(function () {
+    Route::get('/registro', [RegisterController::class, 'create'])->name('registro.create');
+    Route::post('/registro', [RegisterController::class, 'store'])->name('registro.store');
 });
 
 Route::middleware('guest')->group(function(){
@@ -54,8 +65,6 @@ Route::middleware('guest')->group(function(){
     })->name('login');
     Route::post('login', [AuthController::class, 'login'])->name('login.post');
 
-    Route::get('/registro', [RegisterController::class, 'showRegistroForm'])->name('registro');
-    Route::post('/registro', [RegisterController::class, 'registrar'])->name('registro.store');
 
     Route::get('password/reset', [ResetPasswordController::class, 'showRequestForm'])->name('password.request');
     Route::post('password/email', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.send-link');

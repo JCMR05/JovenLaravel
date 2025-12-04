@@ -1,13 +1,13 @@
 @extends('autenticacion.app')
 @section('titulo', 'Sistema - Login')
 @section('contenido')
-<div class="card card-outline card-primary">
+<div class="card card-outline card-login">
   <div class="card-header">
     <a
       href="/"
-      class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover"
+      class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-75-hover"
     >
-      <h1 class="mb-0"><b>Sistema</b>LTE</h1>
+      <h1 class="mb-0"><b>El Parche de Pan</b> Login</h1>
     </a>
   </div>
   <div class="card-body login-card-body">
@@ -39,23 +39,23 @@
         </div>
         <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
       </div>
-      <p class="mb-1"><a href="{{route('password.request')}}">Recuperar password</a></p>
+      <p class="mb-1"><a href="{{ route('password.request') }}" style="color: #ff6a00; text-decoration: none;" onmouseover="this.style.color='#e65f00'" onmouseout="this.style.color='#ff6a00'">Recuperar password</a></p>
       <!--begin::Row-->
       <div class="row">
         <!-- /.col -->
         <div class="col-4">
           <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-primary">Acceder</button>
+            <button type="submit" class="btn btn-login">Acceder</button>
           </div>
         </div>
         <!-- /.col -->
       </div>
       <!--end::Row-->
     </form>
+    <a href="{{ route('registro.create') }}" style="color: #ff6a00; text-decoration: none;" onmouseover="this.style.color='#e65f00'" onmouseout="this.style.color='#ff6a00'">¿No tienes cuenta? Regístrate</a>
     <!-- /.social-auth-links -->
   </div>
   <!-- /.login-card-body -->
 </div>
 @endsection
 
-      

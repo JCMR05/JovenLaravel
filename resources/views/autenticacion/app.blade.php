@@ -47,7 +47,7 @@
   </head>
   <!--end::Head-->
   <!--begin::Body-->
-  <body class="login-page bg-body-secondary">
+<body class="login-page bg-body-secondary"> <img src="{{ asset('uploads/productos/fondo.jpg') }}" alt="Logo" style="position: fixed; width: 100%; height: auto; object-fit: cover; z-index: -1; filter: brightness(0.6); ">
     <div class="login-box">
       @yield('contenido')
     </div>

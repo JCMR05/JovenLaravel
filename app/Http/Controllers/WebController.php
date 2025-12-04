@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Categoria;
 use App\Models\Producto;
 
@@ -83,5 +84,33 @@ class WebController extends Controller
         $producto = Producto::findOrFail($id);
         // Pasar el producto a la vista
         return view('web.item', compact('producto'));
+    }
+
+    public function perfil(Request $request)
+    {
+        $user = $request->user();
+        return view('web.perfil', compact('user'));
+    }
+
+    public function perfilUpdate(Request $request)
+    {
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email:rfc,dns|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect()->route('home')->with('status', 'Perfil actualizado');
     }
 }

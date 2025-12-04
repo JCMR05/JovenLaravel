@@ -1,17 +1,17 @@
 @extends('autenticacion.app')
 @section('titulo', 'Sistema - Registro')
 @section('contenido')
-<div class="card card-outline card-primary">
+<div class="card card-outline card-login">
   <div class="card-header">
     <a
       href="/"
-      class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover"
+      class="link-dark text-center  link-opacity-100 link-opacity-75-hover"
     >
-      <h1 class="mb-0"><b>Sistema</b>LTE</h1>
+      <h1 class="mb-0"><b>El Parche de Pan</b> Registro</h1>
     </a>
   </div>
   <div class="card-body login-card-body">
-    <p class="login-box-msg">Registro</p>
+    <p class="login-box-msg">Agrega tus datos para registrarte</p>
     @if(session('error'))
       <div class="alert alert-danger">
         {{session('error')}}
@@ -41,7 +41,7 @@
       </div>
       <div class="input-group mb-1">
         <div class="form-floating">
-          <input id="loginPassword" type="text" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="" />
+          <input id="loginPassword" type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="" />
           <label for="loginPassword">Password</label>
         </div>
         <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
@@ -51,7 +51,7 @@
       </div>
       <div class="input-group mb-1">
         <div class="form-floating">
-          <input id="password_confirmation" type="text" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="" />
+          <input id="password_confirmation" type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="" />
           <label for="password_confirmation">Confirme su password</label>
         </div>
         <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
@@ -64,7 +64,7 @@
         <!-- /.col -->
         <div class="col-4">
           <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-primary">Registrar</button>
+            <button type="submit" class="btn btn-login">Registrar</button>
           </div>
         </div>
         <!-- /.col -->
@@ -77,4 +77,3 @@
 </div>
 @endsection
 
-      

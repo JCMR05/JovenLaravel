@@ -1,7 +1,7 @@
 @extends('autenticacion.app')
 @section('titulo', 'Sistema - Cambiar Password')
 @section('contenido')
-<div class="card card-outline card-primary">
+<div class="card card-outline card-login">
   <div class="card-header">
     <a
       href="/"
@@ -53,9 +53,9 @@
       <!--begin::Row-->
       <div class="row">
         <!-- /.col -->
-        <div class="col-4">
+        <div class="col-12">
           <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-primary">Actualizar password</button>
+            <button type="submit" class="btn btn-login">Actualizar password</button>
           </div>
         </div>
         <!-- /.col -->

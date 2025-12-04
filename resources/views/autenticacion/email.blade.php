@@ -1,17 +1,17 @@
 @extends('autenticacion.app')
 @section('titulo', 'Sistema - Recuperar Password')
 @section('contenido')
-<div class="card card-outline card-primary">
+<div class="card card-outline card-login">
   <div class="card-header">
     <a
       href="/"
-      class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover"
+      class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-75-hover"
     >
-      <h1 class="mb-0"><b>Sistema</b>LTE</h1>
+      <h1 class="mb-0"><b>El Parche de Pan</b> Recuperación</h1>
     </a>
   </div>
   <div class="card-body login-card-body">
-    <p class="login-box-msg">Ingrese su email para recuperar su password</p>
+    <p class="login-box-msg">Ingrese su email para recuperar su contraseña</p>
     @if(session('error'))
       <div class="alert alert-danger">
         {{session('error')}}
@@ -38,9 +38,9 @@
       <!--begin::Row-->
       <div class="row">
         <!-- /.col -->
-        <div class="col-4">
+        <div class="col-12">
           <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-primary">Enviar enlace de recuperación</button>
+            <button type="submit" class="btn btn-login">Enviar enlace de recuperación</button>
           </div>
         </div>
         <!-- /.col -->
