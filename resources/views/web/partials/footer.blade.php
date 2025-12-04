@@ -3,8 +3,8 @@
     <div class="container py-5">
         <div class="footer-slice">
             <div class="footer-column mb-3">
-                <h3 class="footer-title">🥖 La Panadería</h3>
-                <p class="footer-text">Pan artesanal elaborado con amor desde 1993</p>
+                <a class="navbar-brand" href="/"> <img src="{{ asset('uploads/productos/ok7.png') }}" alt="Logo" style="height: 45px;"> <h3>El Parche de Pan</h3></a>
+                <p class="footer-text">Pan artesanal elaborado con amor para alegrar tu vida</p>
             </div>
 
             <div class="footer-column mb-3">

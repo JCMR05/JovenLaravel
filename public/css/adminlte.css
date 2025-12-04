@@ -3148,6 +3148,27 @@ textarea.form-control-lg {
   --bs-btn-disabled-bg: #ffc107;
   --bs-btn-disabled-border-color: #ffc107;
 }
+.btn-login {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #ff6a00;
+  --bs-btn-border-color: #ff6a00;
+
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #ff7a1a; /* Un poco más claro para hover */
+  --bs-btn-hover-border-color: #ff7a1a;
+
+  --bs-btn-focus-shadow-rgb: 255, 106, 0;
+
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #e65f00; /* Un poco más oscuro para active */
+  --bs-btn-active-border-color: #e65f00;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
+
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #ff6a00;
+  --bs-btn-disabled-border-color: #ff6a00;
+}
+
 
 .btn-danger {
   --bs-btn-color: #fff;
@@ -14473,7 +14494,14 @@ html.maximized-card {
   --lte-card-variant-color: #fff;
   --lte-card-variant-color-rgb: 255, 255, 255;
 }
-
+.card-login,
+.bg-login,
+.text-bg-login {
+  --lte-card-variant-bg: #ff6a00;
+  --lte-card-variant-bg-rgb: 255, 106, 0;
+  --lte-card-variant-color: #fff;
+  --lte-card-variant-color-rgb: 255, 255, 255;
+}
 .card-info,
 .bg-info,
 .text-bg-info {
