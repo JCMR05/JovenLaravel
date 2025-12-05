@@ -187,7 +187,7 @@
 <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 
 <!-- Reemplazado: la lógica JS ahora está en public/js/scripts.js -->
-<script src="{{ asset('js/scripts.js') }}"></script>
+<script src="{{ asset('js/scripts.js') }}?v={{ time() }}"></script>
 
     <!-- About Section (moved from index.html) -->
     <section class="about-section" id="sobre-nosotros">
