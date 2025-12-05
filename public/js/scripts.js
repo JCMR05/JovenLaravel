@@ -161,18 +161,6 @@ function toggleMenu() {
 	mobileMenu.classList.toggle('active');
 }
 
-// Scroll to Products
-function scrollToProducts() {
-    const el = document.getElementById('productos');
-    if (el) {
-        const navbarHeight = 80; // ← Cambia este valor para ajustar la altura
-        const targetPosition = el.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
-        window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-        });
-    }
-}
 
 // Show Notification (optional)
 function showNotification(message) {
@@ -240,6 +228,34 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 			document.body.style.overflow = '';
 		}
 	});
+});
+
+// Scroll suave con offset para navbar fijo
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('a[href*="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            // Extraer solo el hash (#sobre-nosotros, #productos, etc.)
+            const hash = href.includes('#') ? '#' + href.split('#')[1] : null;
+            
+            if (!hash || hash === '#') return;
+            
+            const targetElement = document.querySelector(hash);
+            if (targetElement) {
+                e.preventDefault();
+                const navbarHeight = 60; // ← AJUSTA ESTE VALOR
+                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Actualizar URL sin recargar
+                history.pushState(null, null, hash);
+            }
+        });
+    });
 });
 
 // ============================================
