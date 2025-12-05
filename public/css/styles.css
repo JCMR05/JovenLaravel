@@ -5859,6 +5859,14 @@ textarea.form-control-lg {
 }
 
 /* ...existing code... */
+
+/* Offset para secciones con anchor links */
+#productos,
+#sobre-nosotros,
+#contacto,
+#inicio {
+    scroll-margin-top: 30px; /* Ajusta este valor */
+}
 /* Productos: panel y animaciones movidas desde index.blade.php */
 .products-panel { 
     overflow: visible; 

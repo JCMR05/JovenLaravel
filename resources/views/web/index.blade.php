@@ -61,7 +61,7 @@
 
 
 <!-- Section: si hay búsqueda mostrar solo productos -->
-<section class="py-5">
+<section class="py-5" id="productos">  <!-- ✅ Agregar id="productos" -->
     <div class="container-fluid px-lg-5 mt-1">
         @if(!empty($productos) || request('search'))
             @php
