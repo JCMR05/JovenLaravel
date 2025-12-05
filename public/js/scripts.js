@@ -163,8 +163,15 @@ function toggleMenu() {
 
 // Scroll to Products
 function scrollToProducts() {
-	const el = document.getElementById('productos');
-	if (el) el.scrollIntoView({ behavior: 'smooth' });
+    const el = document.getElementById('productos');
+    if (el) {
+        const navbarHeight = 80; // ← Cambia este valor para ajustar la altura
+        const targetPosition = el.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    }
 }
 
 // Show Notification (optional)
