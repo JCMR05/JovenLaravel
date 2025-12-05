@@ -5865,7 +5865,7 @@ textarea.form-control-lg {
 #sobre-nosotros,
 #contacto,
 #inicio {
-    scroll-margin-top: 30px; /* Ajusta este valor */
+    scroll-margin-top: 50px; /* Ajusta este valor */
 }
 /* Productos: panel y animaciones movidas desde index.blade.php */
 .products-panel { 
