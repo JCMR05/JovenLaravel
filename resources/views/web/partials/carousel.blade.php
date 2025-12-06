@@ -1,12 +1,12 @@
-<?php
+
+@php
     $perPage = 3;
     $totalItems = $items->count();
     $totalPages = ceil($totalItems / $perPage);
     $firstPageItems = $items->take($perPage);
-?>
+@endphp
 
-{{-- Datos para JavaScript PRIMERO --}}
-@if($totalPages > 1)
+{{-- Datos para JavaScript --}}
 <script>
     window.carouselData = window.carouselData || {};
     window.carouselData['{{ $carouselId }}'] = [
@@ -22,8 +22,9 @@
         }{{ !$loop->last ? ',' : '' }}
         @endforeach
     ];
+    window.carouselIds = window.carouselIds || [];
+    window.carouselIds.push('{{ $carouselId }}');
 </script>
-@endif
 
 <div class="carousel-wrapper" id="carousel-wrapper-{{ $carouselId }}">
     @if($totalPages > 1)
@@ -40,7 +41,7 @@
     @endif
 
     <div class="carousel-content">
-        <div class="carousel-track" data-carousel="{{ $carouselId }}">
+        <div class="carousel-track" data-carousel="{{ $carouselId }}" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
             @foreach($firstPageItems as $producto)
             <div class="product-card">
                 <div class="product-image">
@@ -65,23 +66,4 @@
     <button class="dot {{ $i === 0 ? 'active' : '' }}" data-page="{{ $i }}"></button>
     @endfor
 </div>
-
-{{-- Inicializar este carrusel inmediatamente --}}
-<script>
-(function() {
-    function initThisCarousel() {
-        if (typeof initCarousel === 'function' && window.carouselData && window.carouselData['{{ $carouselId }}']) {
-            initCarousel('{{ $carouselId }}', window.carouselData['{{ $carouselId }}']);
-        }
-    }
-    
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(initThisCarousel, 100);
-        });
-    } else {
-        setTimeout(initThisCarousel, 100);
-    }
-})();
-</script>
 @endif

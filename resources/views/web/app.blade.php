@@ -35,6 +35,37 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="{{asset('js/scripts.js')}}?v={{ time() }}"></script>
+        
+        {{-- Inicializar TODOS los carruseles después de que el JS principal cargue --}}
+        <script>
+            (function() {
+                function initAllCarousels() {
+                    if (typeof window.initCarousel === 'function' && window.carouselIds) {
+                        window.carouselIds.forEach(function(id) {
+                            var track = document.querySelector('.carousel-track[data-carousel="' + id + '"]');
+                            if (track && !track.dataset.initialized && window.carouselData[id]) {
+                                track.dataset.initialized = 'true';
+                                window.initCarousel(id, window.carouselData[id]);
+                            }
+                        });
+                    }
+                }
+                
+                // Intentar múltiples veces para asegurar que funcione
+                if (document.readyState === 'complete') {
+                    setTimeout(initAllCarousels, 100);
+                } else {
+                    window.addEventListener('load', function() {
+                        setTimeout(initAllCarousels, 100);
+                    });
+                }
+                
+                // Respaldo adicional
+                setTimeout(initAllCarousels, 500);
+                setTimeout(initAllCarousels, 1000);
+            })();
+        </script>
+        
         @stack('scripts')
     </body>
 </html>
