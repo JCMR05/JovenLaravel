@@ -78,20 +78,20 @@
   --bs-code-color: #d63384;
   --bs-highlight-bg: #fff3cd;
   
-  /* === Variables para tarjetas de productos === */
-  --card-image-height: 200px;
-  --card-border-radius: 0.75rem;
-  --card-padding: 1.25rem;
-  --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  --card-shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.15);
-  --card-btn-bg: #d97706;
-  --card-btn-hover: #b45309;
-  --card-category-color: #d97706;
-  --card-title-color: #78350f;
-  --card-desc-color: #6b7280;
-  --card-desc-height: 40px;
-  --card-name-height: 44px;
-  --card-category-height: 18px;
+
+  
+    /* === Variables para tarjetas de productos === */
+    --card-image-height: 180px;
+    --card-border-radius: 0.75rem;
+    --card-padding: 1rem;
+    --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    --card-shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.15);
+    --card-btn-bg: #d97706;
+    --card-btn-hover: #b45309;
+    --card-category-color: #d97706;
+    --card-title-color: #78350f;
+    --card-desc-color: #6b7280;
+    --card-total-height: 400px;
 }
 
 *,
@@ -6581,9 +6581,13 @@ textarea.form-control-lg {
     opacity: 1;
     transition: opacity 0.5s ease, transform 0.5s ease;
     grid-template-columns: repeat(3, 1fr);
-    align-items: stretch; /* Todas las tarjetas misma altura */
+    align-items: start; /* Alinear al inicio, no estirar */
 }
 
+/* Forzar altura uniforme en las tarjetas */
+.carousel-track .product-card {
+    height: var(--card-total-height);
+}
 /* Forzar que todas las celdas del grid tengan la misma altura */
 .carousel-track > * {
     height: 100%;
@@ -6608,8 +6612,8 @@ textarea.form-control-lg {
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    min-height: 420px; /* Altura mínima fija para uniformidad */
+    height: var(--card-total-height); /* Altura FIJA, no mínima */
+    max-height: var(--card-total-height);
 }
 
 .product-card:hover {
@@ -6655,46 +6659,51 @@ textarea.form-control-lg {
     padding: var(--card-padding);
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-    justify-content: space-between;
+    flex: 1;
+    overflow: hidden;
 }
 
 .product-category {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: var(--card-category-color);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-weight: 600;
-    margin-bottom: 0.35rem;
-    min-height: var(--card-category-height);
-    line-height: 1.2;
+    margin-bottom: 0.25rem;
+    height: 32px; /* Altura fija para 2 líneas máximo */
+    line-height: 1.15;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    flex-shrink: 0;
 }
 
 .product-name {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--card-title-color);
-    margin: 0 0 0.5rem 0;
-    line-height: 1.3;
-    min-height: var(--card-name-height);
-    max-height: var(--card-name-height);
+    margin: 0 0 0.35rem 0;
+    line-height: 1.25;
+    height: 40px; /* Altura fija para 2 líneas */
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    flex-shrink: 0;
 }
 
 .product-description {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     color: var(--card-desc-color);
-    line-height: 1.4;
-    margin-bottom: 1rem;
+    line-height: 1.35;
+    margin-bottom: 0.75rem;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    min-height: var(--card-desc-height);
-    max-height: var(--card-desc-height);
+    height: 36px; /* Altura fija para 2 líneas */
+    flex-shrink: 0;
 }
 
 .product-btn {
@@ -6702,10 +6711,10 @@ textarea.form-control-lg {
     width: 100%;
     background: var(--card-btn-bg);
     color: white;
-    padding: 0.75rem 1rem;
+    padding: 0.6rem 1rem;
     border-radius: 9999px;
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
     text-align: center;
     transition: background 0.3s ease;
@@ -6743,6 +6752,10 @@ textarea.form-control-lg {
 
 /* Responsive - cambiar el orden (mobile first) */
 @media (max-width: 639px) {
+    :root {
+        --card-total-height: 380px;
+        --card-image-height: 160px;
+    }
     .carousel-track { 
         grid-template-columns: 1fr; 
     }
@@ -6758,26 +6771,25 @@ textarea.form-control-lg {
     .carousel-btn-next { 
         right: -0.5rem; 
     }
-    .product-card {
-        min-height: 380px;
-    }
 }
 
 @media (min-width: 640px) and (max-width: 1023px) {
+    :root {
+        --card-total-height: 390px;
+        --card-image-height: 170px;
+    }
     .carousel-track { 
         grid-template-columns: repeat(2, 1fr); 
-    }
-    .product-card {
-        min-height: 400px;
     }
 }
 
 @media (min-width: 1024px) {
+    :root {
+        --card-total-height: 400px;
+        --card-image-height: 180px;
+    }
     .carousel-track { 
         grid-template-columns: repeat(3, 1fr); 
-    }
-    .product-card {
-        min-height: 420px;
     }
 }
 
