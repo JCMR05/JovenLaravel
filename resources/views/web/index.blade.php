@@ -2,6 +2,8 @@
 @section('header')
 @endsection
 @section('contenido')
+
+{{-- Barra de búsqueda y filtros --}}
 <form method="GET" action="{{route('web.index')}}">
     <div class="container px-4 px-lg-5 mt-4">
         <div class="row">
@@ -22,16 +24,13 @@
                 <div class="input-group">
                     <label class="input-group-text" for="sortSelect">Ordenar por:</label>
                     <select class="form-select" id="sortSelect" name="sort">
-                        <option value="priceAsc" {{ request('sort') == 'priceAsc' ? 'selected' : '' }}>Precio: menor a
-                            mayor</option>
-                        <option value="priceDesc" {{ request('sort') == 'priceDesc' ? 'selected' : '' }}>Precio: mayor a
-                            menor</option>
+                        <option value="priceAsc" {{ request('sort') == 'priceAsc' ? 'selected' : '' }}>Precio: menor a mayor</option>
+                        <option value="priceDesc" {{ request('sort') == 'priceDesc' ? 'selected' : '' }}>Precio: mayor a menor</option>
                     </select>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Collapse: filter options -->
     <div class="container px-4 px-lg-5">
         <div class="collapse mt-2" id="filterOptions">
             <div class="card card-body">
@@ -50,7 +49,7 @@
                     <div class="col-md-4 d-flex align-items-center justify-content-end">
                         <div>
                             <button type="submit" class="btn btn-primary me-2">Aplicar filtros</button>
-                            <a href="{{ route('web.index', array_merge(request()->except('categories', 'page'), ['categories' => []])) }}" class="btn btn-outline-secondary">Limpiar filtros</a>
+                            <a href="{{ route('web.index') }}" class="btn btn-outline-secondary">Limpiar</a>
                         </div>
                     </div>
                 </div>
@@ -59,166 +58,142 @@
     </div>
 </form>
 
+{{-- Sección de Productos --}}
+<div id="productos">
+    @if(!empty($productos) || request('search'))
+        {{-- RESULTADOS DE BÚSQUEDA --}}
+        @php
+            $productos = $productos ?? collect();
+        @endphp
+        
+        <div class="carousel-section">
+            <div class="carousel-container">
+                <div class="carousel-header">
+                    <h2>Resultados de búsqueda</h2>
+                    <p>Mostrando resultados para: "{{ request('search') }}"</p>
+                </div>
 
-<!-- Section: si hay búsqueda mostrar solo productos -->
-<section class="py-5" id="productos">  <!-- ✅ Agregar id="productos" -->
-    <div class="container-fluid px-lg-5 mt-1">
-        @if(!empty($productos) || request('search'))
-            @php
-                $productos = $productos ?? (isset($productos) ? $productos : \App\Models\Producto::where('nombre','like','%'.request('search').'%')->paginate(8));
-            @endphp
+                @if($productos->count() > 0)
+                <div class="carousel-wrapper">
+                    <button class="carousel-btn carousel-btn-prev" data-carousel="search" aria-label="Anterior">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <button class="carousel-btn carousel-btn-next" data-carousel="search" aria-label="Siguiente">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                    <div class="carousel-content">
+                        <div class="carousel-track" data-carousel="search"></div>
+                    </div>
+                </div>
+                <div class="carousel-dots" data-carousel="search"></div>
+                @else
+                <p class="text-center text-muted">No se encontraron productos.</p>
+                @endif
+            </div>
+        </div>
 
-            <!-- Panel único para búsqueda -->
-            <div class="products-panel position-relative" style="background: #ece6e6; border-radius: 1rem; padding: 2rem; display: flex; align-items: center; gap: 2rem;">
-                
-                <!-- Botón Anterior -->
-                <button class="btn-side btn-prev btn btn-outline-dark" 
-                        style="flex-shrink: 0; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; display: none; cursor: pointer;">
-                    &#10094;
-                </button>
+        <script>
+            window.carouselData = window.carouselData || {};
+            window.carouselData['search'] = [
+                @foreach($productos as $producto)
+                {
+                    id: {{ $producto->id }},
+                    name: "{{ addslashes($producto->nombre) }}",
+                    category: "{{ $producto->categorias->first()->nombre ?? 'General' }}",
+                    price: {{ $producto->precio }},
+                    description: "{{ addslashes(Str::limit($producto->descripcion ?? 'Delicioso producto artesanal', 80)) }}",
+                    image: "{{ $producto->imagen && filter_var($producto->imagen, FILTER_VALIDATE_URL) ? $producto->imagen : asset('uploads/productos/' . $producto->imagen) }}",
+                    url: "{{ route('web.show', $producto->id) }}"
+                },
+                @endforeach
+            ];
+        </script>
 
-                <!-- Contenedor de productos -->
-                <div class="panel-content flex-grow-1" style="min-width: 0;">
-                    <h3 class="mb-4">Resultados de búsqueda: "{{ request('search') }}"</h3>
-                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                        @forelse($productos as $producto)
-                            <div class="col mb-5">
-                                <div class="card h-100">
-                                    <img class="card-img-top" src="{{ $producto->imagen && filter_var($producto->imagen, FILTER_VALIDATE_URL) ? $producto->imagen : asset('uploads/productos/'. $producto->imagen) }}" alt="{{ $producto->nombre }}" />
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            <h5 class="fw-bolder">{{ $producto->nombre }}</h5>
-                                            $ {{ number_format($producto->precio, 2) }}
-                                        </div>
-                                    </div>
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center">
-                                            <a class="btn btn-outline-dark mt-auto" href="{{ route('web.show', $producto->id) }}">Ver producto</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="col-12">
-                                <p>No se encontraron productos.</p>
-                            </div>
-                        @endforelse
+    @else
+        {{-- VISTA POR CATEGORÍAS CON CARRUSEL FIGMA --}}
+        @foreach($categorias as $categoria)
+            @if($categoria->productos->count() > 0)
+            <div class="carousel-section" style="background: {{ $loop->even ? '#fff9f0' : 'linear-gradient(to bottom, #ffffff, #fef3c7)' }};">
+                <div class="carousel-container">
+                    <div class="carousel-header">
+                        <h2>{{ $categoria->nombre }}</h2>
+                        <p>Descubre nuestra selección de {{ strtolower($categoria->nombre) }} elaborados artesanalmente.</p>
                     </div>
 
-                    <!-- Paginador oculto (solo para extraer URLs) -->
-                    <div class="paginator-wrapper d-none">
-                        {{ $productos->links() }}
+                    <div class="carousel-wrapper">
+                        <button class="carousel-btn carousel-btn-prev" data-carousel="cat-{{ $categoria->id }}" aria-label="Anterior">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        <button class="carousel-btn carousel-btn-next" data-carousel="cat-{{ $categoria->id }}" aria-label="Siguiente">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                        <div class="carousel-content">
+                            <div class="carousel-track" data-carousel="cat-{{ $categoria->id }}"></div>
+                        </div>
                     </div>
-                </div> <!-- .panel-content -->
+                    <div class="carousel-dots" data-carousel="cat-{{ $categoria->id }}"></div>
+                </div>
+            </div>
 
-                <!-- Botón Siguiente -->
-                <button class="btn-side btn-next btn btn-outline-dark" 
-                        style="flex-shrink: 0; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; display: none; cursor: pointer;">
-                    &#10095;
-                </button>
-            </div> <!-- .products-panel -->
+            <script>
+                window.carouselData = window.carouselData || {};
+                window.carouselData['cat-{{ $categoria->id }}'] = [
+                    @foreach($categoria->productos as $producto)
+                    {
+                        id: {{ $producto->id }},
+                        name: "{{ addslashes($producto->nombre) }}",
+                        category: "{{ $categoria->nombre }}",
+                        price: {{ $producto->precio }},
+                        description: "{{ addslashes(Str::limit($producto->descripcion ?? 'Delicioso producto artesanal', 80)) }}",
+                        image: "{{ asset('uploads/productos/' . $producto->imagen) }}",
+                        url: "{{ route('web.show', $producto->id) }}"
+                    },
+                    @endforeach
+                ];
+            </script>
+            @endif
+        @endforeach
+    @endif
+</div>
 
-        @else
-            {{-- Vista por categorías (sin búsqueda) --}}
-            @foreach($categorias as $categoria)
-                <!-- Panel para cada categoría -->
-                <div class="category-section mb-5">
-                    <h3 class="section-title mb-4">{{ $categoria->nombre }}</h3>
-                    
-                    <div class="products-panel position-relative" style="background: #ece6e6; border-radius: 1rem; padding: 2rem; display: flex; align-items: center; gap: 2rem;">
-                        
-                        <!-- Botón Anterior por categoría -->
-                        <button class="btn-side btn-prev btn btn-outline-dark" 
-                                style="flex-shrink: 0; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; display: none; cursor: pointer;">
-                            &#10094;
-                        </button>
-
-                        <!-- Contenedor de productos por categoría -->
-                        <div class="panel-content flex-grow-1" style="min-width: 0;">
-                            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                                @forelse($categoria->productos as $producto)
-                                    <div class="col mb-5">
-                                        <div class="card h-100">
-                                            <img class="card-img-top" src="{{ asset('uploads/productos/'. $producto->imagen) }}" alt="{{ $producto->nombre }}" />
-                                            <div class="card-body p-4">
-                                                <div class="text-center">
-                                                    <h5 class="fw-bolder">{{ $producto->nombre }}</h5>
-                                                    $ {{ number_format($producto->precio, 2) }}
-                                                </div>
-                                            </div>
-                                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                                <div class="text-center">
-                                                    <a class="btn btn-outline-dark mt-auto" href="{{ route('web.show', $producto->id) }}">Ver producto</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @empty
-                                    <div class="col-12">
-                                        <p>No hay productos en esta categoría.</p>
-                                    </div>
-                                @endforelse
-                            </div>
-
-                            <!-- Paginador oculto para cada categoría -->
-                            <div class="paginator-wrapper d-none">
-                                {{ $categoria->productos->appends(request()->except('page_cat_'.$categoria->id))->links() }}
-                            </div>
-                        </div> <!-- .panel-content -->
-
-                        <!-- Botón Siguiente por categoría -->
-                        <button class="btn-side btn-next btn btn-outline-dark" 
-                                style="flex-shrink: 0; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; display: none; cursor: pointer;">
-                            &#10095;
-                        </button>
-                    </div> <!-- .products-panel -->
-                </div> <!-- .category-section -->
-            @endforeach
-        @endif
+{{-- About Section --}}
+<section class="about-section" id="sobre-nosotros">
+    <div class="container">
+        <div class="section-header text-center mb-4">
+            <h2 class="section-title">Nuestra Historia</h2>
+            <p class="section-subtitle">Somos una panadería familiar dedicada a mantener viva la tradición del pan artesanal,
+                combinando recetas tradicionales con las mejores técnicas modernas.</p>
+        </div>
+        <div class="features-grid row">
+            <div class="feature-card col-md-4 mb-3 text-center">
+                <div class="feature-icon mb-2"><i class="fas fa-clock fa-2x"></i></div>
+                <h3>Horneado Diario</h3>
+                <p>Todos nuestros productos son elaborados frescos cada mañana</p>
+            </div>
+            <div class="feature-card col-md-4 mb-3 text-center">
+                <div class="feature-icon mb-2"><i class="fas fa-heart fa-2x"></i></div>
+                <h3>Ingredientes Naturales</h3>
+                <p>Utilizamos solo ingredientes de la más alta calidad, sin conservantes</p>
+            </div>
+            <div class="feature-card col-md-4 mb-3 text-center">
+                <div class="feature-icon mb-2"><i class="fas fa-award fa-2x"></i></div>
+                <h3>Tradición Artesanal</h3>
+                <p>Más de 30 años de experiencia en el arte de la panadería</p>
+            </div>
+        </div>
     </div>
 </section>
 
-<!-- Estilos y scripts para transición y paginación lateral -->
-@push('styles')
-<!-- removed: moved styles to public/css/styles.css -->
-@endpush
-
-<!-- Cargar CSS centralizado -->
-<link href="{{ asset('css/styles.css') }}" rel="stylesheet">
-
-<!-- Reemplazado: la lógica JS ahora está en public/js/scripts.js -->
+<link href="{{ asset('css/styles.css') }}?v={{ time() }}" rel="stylesheet">
 <script src="{{ asset('js/scripts.js') }}?v={{ time() }}"></script>
-
-    <!-- About Section (moved from index.html) -->
-    <section class="about-section" id="sobre-nosotros">
-        <div class="container">
-            <div class="section-header text-center mb-4">
-                <h2 class="section-title">Nuestra Historia</h2>
-                <p class="section-subtitle">Somos una panadería familiar dedicada a mantener viva la tradición del pan artesanal,
-                    combinando recetas tradicionales con las mejores técnicas modernas.</p>
-            </div>
-
-            <div class="features-grid row">
-                <div class="feature-card col-md-4 mb-3 text-center">
-                    <div class="feature-icon mb-2"><i class="fas fa-clock fa-2x"></i></div>
-                    <h3>Horneado Diario</h3>
-                    <p>Todos nuestros productos son elaborados frescos cada mañana</p>
-                </div>
-
-                <div class="feature-card col-md-4 mb-3 text-center">
-                    <div class="feature-icon mb-2"><i class="fas fa-heart fa-2x"></i></div>
-                    <h3>Ingredientes Naturales</h3>
-                    <p>Utilizamos solo ingredientes de la más alta calidad, sin conservantes</p>
-                </div>
-
-                <div class="feature-card col-md-4 mb-3 text-center">
-                    <div class="feature-icon mb-2"><i class="fas fa-award fa-2x"></i></div>
-                    <h3>Tradición Artesanal</h3>
-                    <p>Más de 30 años de experiencia en el arte de la panadería</p>
-                </div>
-            </div>
-        </div>
-    </section>
 @endsection
 
 

@@ -5860,6 +5860,227 @@ textarea.form-control-lg {
 
 /* ...existing code... */
 
+/* ============================================
+   CARRUSEL FIGMA - PRODUCTOS POR CATEGORÍA
+   ============================================ */
+
+.carousel-section {
+    padding: 4rem 0;
+    background: linear-gradient(to bottom, #ffffff, #fef3c7);
+}
+
+.carousel-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.carousel-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.carousel-header h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #78350f;
+    margin-bottom: 1rem;
+}
+
+.carousel-header p {
+    font-size: 1.125rem;
+    color: #92400e;
+    max-width: 42rem;
+    margin: 0 auto;
+    line-height: 1.75;
+}
+
+.carousel-wrapper {
+    position: relative;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    padding: 0.75rem;
+    border-radius: 9999px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #78350f;
+}
+
+.carousel-btn:hover {
+    background: #ffffff;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: translateY(-50%);
+}
+
+.carousel-btn-prev { left: -1.25rem; }
+.carousel-btn-next { right: -1.25rem; }
+
+.carousel-content {
+    padding: 0 3rem;
+}
+
+.carousel-track {
+    display: grid;
+    gap: 1.5rem;
+    opacity: 1;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.carousel-track.fade-out {
+    opacity: 0;
+    transform: translateX(100px);
+}
+
+.carousel-track.fade-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Tarjetas estilo Figma */
+.product-card {
+    background: white;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transform: translateY(-5px);
+}
+
+.product-image {
+    position: relative;
+    height: 16rem;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.05);
+}
+
+.product-price {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #d97706;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.product-info {
+    padding: 1.5rem;
+}
+
+.product-category {
+    font-size: 0.875rem;
+    color: #d97706;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.product-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #78350f;
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.product-description {
+    font-size: 0.875rem;
+    color: #92400e;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-btn {
+    display: inline-block;
+    background: #d97706;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background 0.3s ease;
+}
+
+.product-btn:hover {
+    background: #b45309;
+    color: white;
+}
+
+/* Dots */
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    background: #fcd34d;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.dot.active {
+    width: 2rem;
+    background: #d97706;
+}
+
+/* Responsive */
+@media (min-width: 1024px) {
+    .carousel-track { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+    .carousel-track { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 639px) {
+    .carousel-track { grid-template-columns: 1fr; }
+    .carousel-header h2 { font-size: 2rem; }
+    .carousel-content { padding: 0 2rem; }
+    .carousel-btn-prev { left: -0.5rem; }
+    .carousel-btn-next { right: -0.5rem; }
+}
+
 /* Offset para secciones con anchor links */
 #productos,
 #sobre-nosotros,

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\Models\Categoria;
 use App\Models\Producto;
 
@@ -15,102 +14,46 @@ class WebController extends Controller
         $sort = $request->input('sort');
         $selectedCategories = $request->input('categories', []);
 
-        // Filtro para panel de categorías (todos los items para opciones)
         $categoriasFiltro = Categoria::orderBy('nombre')->get();
 
-        // Si hay término de búsqueda, mostrar solo productos (no categorías)
+        // Búsqueda
         if (!empty($search)) {
             $productosQuery = Producto::with('categorias')
                 ->where(function($q) use ($search) {
                     $q->where('nombre', 'like', "%{$search}%")
-                      ->orWhere('descripcion', 'like', "%{$search}%")
-                      ->orWhere('codigo', 'like', "%{$search}%");
+                      ->orWhere('descripcion', 'like', "%{$search}%");
                 });
 
-            // Orden
-            if ($sort === 'priceAsc') {
-                $productosQuery->orderBy('precio', 'asc');
-            } elseif ($sort === 'priceDesc') {
-                $productosQuery->orderBy('precio', 'desc');
-            } else {
-                $productosQuery->orderBy('id', 'desc');
-            }
+            if ($sort === 'priceAsc') $productosQuery->orderBy('precio', 'asc');
+            elseif ($sort === 'priceDesc') $productosQuery->orderBy('precio', 'desc');
+            else $productosQuery->orderBy('id', 'desc');
 
-            // Mostrar 8 productos por página (4 más que antes)
-            $productos = $productosQuery->paginate(8)->appends($request->query());
+            $productos = $productosQuery->take(20)->get();
 
-            // Pasar productos a la vista; no pasamos $categorias para ocultar la vista por categorías
             return view('web.index', compact('productos', 'categoriasFiltro', 'search', 'sort', 'selectedCategories'));
         }
 
-        // Sin búsqueda: mostrar categorías con sus productos paginados por categoría (4 por página)
+        // Categorías
         if (!empty($selectedCategories)) {
-            $categorias = Categoria::whereIn('id', (array) $selectedCategories)
-                ->orderBy('nombre')
-                ->paginate(4);
+            $categorias = Categoria::whereIn('id', (array) $selectedCategories)->orderBy('nombre')->get();
         } else {
-            $categorias = Categoria::whereHas('productos', function($q) use ($search) {
-                    if (!empty($search)) {
-                        $q->where('nombre', 'like', "%{$search}%");
-                    }
-                })
-                ->orderBy('nombre')
-                ->paginate(4);
+            $categorias = Categoria::whereHas('productos')->orderBy('nombre')->get();
         }
 
         foreach ($categorias as $categoria) {
-            $productosQuery = $categoria->productos()
-                ->when(!empty($search), function($q) use ($search) {
-                    $q->where('nombre', 'like', "%{$search}%");
-                });
-
-            if ($sort === 'priceAsc') {
-                $productosQuery->orderBy('precio', 'asc');
-            } elseif ($sort === 'priceDesc') {
-                $productosQuery->orderBy('precio', 'desc');
-            } else {
-                $productosQuery->orderBy('id', 'desc');
-            }
-
-            $pageName = 'page_cat_' . $categoria->id;
-            $categoria->setRelation('productos', $productosQuery->paginate(4, ['*'], $pageName));
+            $q = $categoria->productos();
+            if ($sort === 'priceAsc') $q->orderBy('precio', 'asc');
+            elseif ($sort === 'priceDesc') $q->orderBy('precio', 'desc');
+            else $q->orderBy('id', 'desc');
+            $categoria->setRelation('productos', $q->take(15)->get());
         }
 
         return view('web.index', compact('categorias', 'categoriasFiltro', 'search', 'sort', 'selectedCategories'));
     }
 
-    public function show($id){
-        // Obtener el producto por ID
-        $producto = Producto::findOrFail($id);
-        // Pasar el producto a la vista
-        return view('web.item', compact('producto'));
-    }
-
-    public function perfil(Request $request)
+    public function show($id)
     {
-        $user = $request->user();
-        return view('web.perfil', compact('user'));
-    }
-
-    public function perfilUpdate(Request $request)
-    {
-        $user = $request->user();
-
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email:rfc,dns|max:255|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8|confirmed',
-        ]);
-
-        $user->name = $validated['name'];
-        $user->email = $validated['email'];
-
-        if (!empty($validated['password'])) {
-            $user->password = Hash::make($validated['password']);
-        }
-
-        $user->save();
-
-        return redirect()->route('home')->with('status', 'Perfil actualizado');
+        $producto = Producto::with('categorias')->findOrFail($id);
+        return view('web.show', compact('producto'));
     }
 }

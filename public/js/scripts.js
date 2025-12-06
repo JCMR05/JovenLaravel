@@ -648,3 +648,196 @@ function initProductPanels() {
 document.addEventListener('DOMContentLoaded', function(){
     if (typeof initProductPanels === 'function') initProductPanels();
 });
+
+/* ============================
+   CARRUSEL FIGMA - TRANSICIONES SUAVES
+   ============================ */
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof window.carouselData === 'undefined') return;
+
+    Object.keys(window.carouselData).forEach(carouselId => {
+        initCarousel(carouselId, window.carouselData[carouselId]);
+    });
+});
+
+function initCarousel(id, products) {
+    const track = document.querySelector(`.carousel-track[data-carousel="${id}"]`);
+    const dots = document.querySelector(`.carousel-dots[data-carousel="${id}"]`);
+    const prevBtn = document.querySelector(`.carousel-btn-prev[data-carousel="${id}"]`);
+    const nextBtn = document.querySelector(`.carousel-btn-next[data-carousel="${id}"]`);
+
+    if (!track || !products || products.length === 0) return;
+
+    let current = 0;
+    let perPage = getPerPage();
+    let autoplay;
+    let isAnimating = false; // Prevenir clics durante animación
+
+    function getPerPage() {
+        if (window.innerWidth < 640) return 1;
+        if (window.innerWidth < 1024) return 2;
+        return 3;
+    }
+
+    function totalSlides() {
+        return Math.ceil(products.length / perPage);
+    }
+
+    function createCard(p) {
+        return `
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="${p.image}" alt="${p.name}" loading="lazy">
+                    <div class="product-price">$${Number(p.price).toLocaleString('es-CO')}</div>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">${p.category}</span>
+                    <h3 class="product-name">${p.name}</h3>
+                    <p class="product-description">${p.description}</p>
+                    <a href="${p.url}" class="product-btn">Ver Más</a>
+                </div>
+            </div>
+        `;
+    }
+
+    function render() {
+        const start = current * perPage;
+        const visible = products.slice(start, start + perPage);
+        track.style.gridTemplateColumns = `repeat(${perPage}, 1fr)`;
+        track.innerHTML = visible.map(createCard).join('');
+        updateButtons();
+    }
+
+    function createDots() {
+        if (!dots) return;
+        dots.innerHTML = '';
+        const total = totalSlides();
+        if (total <= 1) return;
+        for (let i = 0; i < total; i++) {
+            const dot = document.createElement('button');
+            dot.classList.add('dot');
+            if (i === current) dot.classList.add('active');
+            dot.onclick = () => { if (!isAnimating) goTo(i); };
+            dots.appendChild(dot);
+        }
+    }
+
+    function updateDots() {
+        if (!dots) return;
+        dots.querySelectorAll('.dot').forEach((d, i) => {
+            d.classList.toggle('active', i === current);
+        });
+    }
+
+    function updateButtons() {
+        if (prevBtn) prevBtn.disabled = current === 0;
+        if (nextBtn) nextBtn.disabled = current >= totalSlides() - 1;
+    }
+
+    function goTo(i, direction = 'next') {
+        if (isAnimating || i === current) return;
+        isAnimating = true;
+
+        // Fase 1: Fade out
+        track.classList.remove('fade-in', 'slide-in');
+        track.classList.add('fade-out');
+
+        setTimeout(() => {
+            current = i;
+            
+            // Preparar entrada desde dirección correcta
+            track.classList.remove('fade-out');
+            track.classList.add('slide-in');
+            
+            render();
+
+            // Forzar reflow
+            void track.offsetWidth;
+
+            // Fase 2: Fade in
+            track.classList.remove('slide-in');
+            track.classList.add('fade-in');
+            
+            updateDots();
+
+            setTimeout(() => {
+                isAnimating = false;
+            }, 600);
+        }, 400);
+    }
+
+    function next() {
+        if (isAnimating) return;
+        if (current < totalSlides() - 1) {
+            goTo(current + 1, 'next');
+        } else {
+            goTo(0, 'next');
+        }
+    }
+
+    function prev() {
+        if (isAnimating) return;
+        if (current > 0) {
+            goTo(current - 1, 'prev');
+        } else {
+            goTo(totalSlides() - 1, 'prev');
+        }
+    }
+
+    function startAutoplay() {
+        if (totalSlides() > 1) {
+            autoplay = setInterval(next, 5000);
+        }
+    }
+
+    function stopAutoplay() {
+        clearInterval(autoplay);
+    }
+
+    // Events
+    if (prevBtn) {
+        prevBtn.onclick = () => {
+            if (isAnimating) return;
+            stopAutoplay();
+            prev();
+            startAutoplay();
+        };
+    }
+
+    if (nextBtn) {
+        nextBtn.onclick = () => {
+            if (isAnimating) return;
+            stopAutoplay();
+            next();
+            startAutoplay();
+        };
+    }
+
+    // Responsive
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            const newPerPage = getPerPage();
+            if (newPerPage !== perPage) {
+                perPage = newPerPage;
+                current = 0;
+                render();
+                createDots();
+            }
+        }, 150);
+    });
+
+    // Pausar en hover
+    const wrapper = track.closest('.carousel-wrapper');
+    if (wrapper) {
+        wrapper.onmouseenter = stopAutoplay;
+        wrapper.onmouseleave = startAutoplay;
+    }
+
+    // Init
+    render();
+    createDots();
+    startAutoplay();
+}
