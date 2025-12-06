@@ -54,6 +54,6 @@ class WebController extends Controller
     public function show($id)
     {
         $producto = Producto::with('categorias')->findOrFail($id);
-        return view('web.show', compact('producto'));
+        return view('web.item', compact('producto'));  // Cambiado de 'web.show' a 'web.item'
     }
 }
