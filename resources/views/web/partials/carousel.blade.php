@@ -1,10 +1,9 @@
 <?php
-@php
     $perPage = 3;
     $totalItems = $items->count();
     $totalPages = ceil($totalItems / $perPage);
     $firstPageItems = $items->take($perPage);
-@endphp
+?>
 
 {{-- Datos para JavaScript PRIMERO --}}
 @if($totalPages > 1)
