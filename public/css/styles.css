@@ -6317,6 +6317,8 @@ textarea.form-control-lg {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    width: 48px;   /* Añadir */
+    height: 48px;  /* Añadir */
 }
 
 .feature-icon-figma i {
