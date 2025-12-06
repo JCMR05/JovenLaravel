@@ -6,26 +6,6 @@
     $firstPageItems = $items->take($perPage);
 @endphp
 
-{{-- Datos para JavaScript --}}
-<script>
-    window.carouselData = window.carouselData || {};
-    window.carouselData['{{ $carouselId }}'] = [
-        @foreach($items as $producto)
-        {
-            id: {{ $producto->id }},
-            name: "{{ addslashes($producto->nombre) }}",
-            category: "{{ $categoryName ?? ($producto->categorias->first()->nombre ?? 'General') }}",
-            price: {{ $producto->precio }},
-            description: "{{ addslashes(Str::limit($producto->descripcion ?? 'Delicioso producto artesanal', 80)) }}",
-            image: "{{ asset('uploads/productos/' . $producto->imagen) }}",
-            url: "{{ route('web.show', $producto->id) }}"
-        }{{ !$loop->last ? ',' : '' }}
-        @endforeach
-    ];
-    window.carouselIds = window.carouselIds || [];
-    window.carouselIds.push('{{ $carouselId }}');
-</script>
-
 <div class="carousel-wrapper" id="carousel-wrapper-{{ $carouselId }}">
     @if($totalPages > 1)
     <button class="carousel-btn carousel-btn-prev" data-carousel="{{ $carouselId }}" aria-label="Anterior" disabled>
@@ -66,4 +46,31 @@
     <button class="dot {{ $i === 0 ? 'active' : '' }}" data-page="{{ $i }}"></button>
     @endfor
 </div>
+
+@push('scripts')
+<script>
+(function() {
+    var carouselId = '{{ $carouselId }}';
+    var products = [
+        @foreach($items as $producto)
+        {
+            id: {{ $producto->id }},
+            name: "{{ addslashes($producto->nombre) }}",
+            category: "{{ $categoryName ?? (addslashes($producto->categorias->first()->nombre ?? 'General')) }}",
+            price: {{ $producto->precio }},
+            description: "{{ addslashes(Str::limit($producto->descripcion ?? 'Delicioso producto artesanal', 80)) }}",
+            image: "{{ asset('uploads/productos/' . $producto->imagen) }}",
+            url: "{{ route('web.show', $producto->id) }}"
+        }{{ !$loop->last ? ',' : '' }}
+        @endforeach
+    ];
+    
+    if (typeof window.initCarousel === 'function') {
+        window.initCarousel(carouselId, products);
+    } else {
+        console.error('initCarousel no está definido para: ' + carouselId);
+    }
+})();
+</script>
+@endpush
 @endif
