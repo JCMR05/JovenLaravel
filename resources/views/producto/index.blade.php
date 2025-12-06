@@ -43,13 +43,14 @@
                                         <th>Nombre</th>
                                         <th>Precio</th>
                                         <th>Categoria</th>
+                                        <th>Destacado</th>
                                         <th>Imagen</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @if(count($registros)<=0)
                                         <tr>
-                                            <td colspan="6">No hay registros que coincidan con la búsqueda</td>
+                                            <td colspan="8">No hay registros que coincidan con la búsqueda</td>
                                         </tr>
                                     @else
                                         @foreach($registros as $reg)
@@ -69,6 +70,13 @@
                                                 <td>{{$reg->nombre}}</td>
                                                 <td>{{$reg->precio}}</td>
                                                 <td>{{ $reg->categorias->pluck('nombre')->implode(', ') }}</td>
+                                                <td>
+                                                    @if($reg->destacado)
+                                                        <span class="badge bg-warning text-dark"><i class="bi bi-star-fill"></i> Sí</span>
+                                                    @else
+                                                        <span class="badge bg-secondary">No</span>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                 @if($reg->imagen)
                                                     <img src="{{ asset('uploads/productos/' . $reg->imagen) }}" alt="{{ $reg->nombre }}" style="max-width: 150px; height: auto;">

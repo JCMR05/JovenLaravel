@@ -52,6 +52,7 @@ class ProductoController extends Controller
         $registro->nombre=$request->input('nombre');
         $registro->precio=$request->input('precio');
         $registro->descripcion=$request->input('descripcion');
+        $registro->destacado=$request->has('destacado') ? true : false;
 
         $sufijo=strtolower(Str::random(2));
         $image = $request->file('imagen');
@@ -100,6 +101,8 @@ class ProductoController extends Controller
         $registro->nombre=$request->input('nombre');
         $registro->precio=$request->input('precio');
         $registro->descripcion=$request->input('descripcion');
+        $registro->destacado=$request->has('destacado') ? true : false;
+        
         $sufijo=strtolower(Str::random(2));
         $image = $request->file('imagen');
         if (!is_null($image)){

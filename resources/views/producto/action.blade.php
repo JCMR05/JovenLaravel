@@ -52,6 +52,22 @@
                                         <small class="text-danger">{{$message}}</small>
                                      @enderror
                                 </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="imagen" class="form-label">Imagen</label>
+                                    <input type="file" class="form-control @error('imagen') is-invalid @enderror"
+                                     id="imagen" name="imagen" value="{{old('imagen')}}">
+                                     @error('imagen')
+                                        <small class="text-danger">{{$message}}</small>
+                                     @enderror
+                                     @if(isset($registro) && $registro->imagen)
+                                        <div class="mt-2">
+                                            <img src="{{ asset('uploads/productos/' . $registro->imagen) }}" 
+                                            alt="Imagen actual" style="max-width: 150px; height: auto; border-radius: 8px;">
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Categorias:</label>
                                     <div>
@@ -67,19 +83,20 @@
                                         @endforeach
                                     </div>
                                 </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="imagen" class="form-label">Imagen</label>
-                                    <input type="file" class="form-control @error('imagen') is-invalid @enderror"
-                                     id="imagen" name="imagen" value="{{old('imagen')}}">
-                                     @error('imagen')
-                                        <small class="text-danger">{{$message}}</small>
-                                     @enderror
-                                     @if(isset($registro) && $registro->imagen)
-                                        <div class="mt-2">
-                                            <img src="{{ asset('uploads/productos/' . $registro->imagen) }}" 
-                                            alt="Imagen actual" style="max-width: 150px; height: auto; border-radius: 8px;">
-                                        </div>
-                                    @endif
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Producto Destacado:</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" 
+                                            id="destacado" name="destacado" value="1"
+                                            @if(old('destacado', isset($registro) ? $registro->destacado : false)) checked @endif
+                                        >
+                                        <label class="form-check-label" for="destacado">
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="bi bi-star-fill"></i> Marcar como destacado
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">Los productos destacados aparecerán en la sección especial de la página principal.</small>
                                 </div>
                             </div>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">

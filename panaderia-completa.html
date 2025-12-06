@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panadería El Trigal - Pan Artesanal Horneado Cada Día</title>
+    <link rel="stylesheet" href="panaderia-styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <a href="#inicio" class="logo">
+                    <div class="logo-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <path d="M16 10a4 4 0 0 1-8 0"></path>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-primary">Panadería</span>
+                        <span class="logo-secondary"> El Trigal</span>
+                    </div>
+                </a>
+
+                <!-- Navigation Desktop -->
+                <nav class="nav-desktop">
+                    <a href="#inicio" class="nav-link">Inicio</a>
+                    <a href="#sobre-nosotros" class="nav-link">Sobre Nosotros</a>
+                    <a href="#productos-destacados" class="nav-link">Productos Destacados</a>
+                    <a href="#ubicacion" class="nav-link">Ubicación</a>
+                    <a href="#productos" class="btn-primary">Ver Productos</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                    <svg class="close-icon hidden" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Navigation -->
+            <nav class="nav-mobile" id="mobileNav">
+                <a href="#inicio" class="nav-link-mobile">Inicio</a>
+                <a href="#sobre-nosotros" class="nav-link-mobile">Sobre Nosotros</a>
+                <a href="#productos-destacados" class="nav-link-mobile">Productos Destacados</a>
+                <a href="#ubicacion" class="nav-link-mobile">Ubicación</a>
+                <a href="#productos" class="btn-primary">Ver Productos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    Pan Artesanal
+                    <br>
+                    <span class="hero-highlight">Horneado Cada Día</span>
+                </h1>
+                <p class="hero-description">
+                    Elaboramos nuestros productos con ingredientes naturales y recetas tradicionales.
+                    Más de 30 años de experiencia en cada bocado.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#productos" class="btn-hero-primary">
+                        Ver Todos los Productos
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </a>
+                    <a href="#sobre-nosotros" class="btn-hero-secondary">Conocer Más</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carousel Section -->
+    <section class="carousel-section">
+        <div class="container">
+            <div class="grid-layout">
+                <!-- Carousel -->
+                <div class="carousel-area">
+                    <div class="section-header">
+                        <h2>Nuestros Favoritos</h2>
+                        <p>Descubre los productos más populares de nuestra panadería, elaborados con recetas tradicionales y los mejores ingredientes.</p>
+                    </div>
+
+                    <div class="carousel-wrapper">
+                        <button class="carousel-btn carousel-btn-prev" id="prevBtn" aria-label="Anterior">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+
+                        <button class="carousel-btn carousel-btn-next" id="nextBtn" aria-label="Siguiente">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+
+                        <div class="carousel-content">
+                            <div class="carousel-track" id="carouselTrack"></div>
+                        </div>
+
+                        <div class="carousel-dots" id="carouselDots"></div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <h3 class="sidebar-title">Información de Contacto</h3>
+
+                    <div class="sidebar-section">
+                        <div class="sidebar-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="sidebar-label">Horario</p>
+                            <p class="sidebar-subtitle">Lunes - Viernes</p>
+                            <p class="sidebar-text">7:00 AM - 8:00 PM</p>
+                            <p class="sidebar-subtitle">Sábados - Domingos</p>
+                            <p class="sidebar-text">8:00 AM - 6:00 PM</p>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <div class="sidebar-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="sidebar-label">Teléfono</p>
+                            <a href="tel:+34912345678" class="sidebar-link">+34 912 345 678</a>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <div class="sidebar-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="sidebar-label">Email</p>
+                            <a href="mailto:info@panaderiaeltrigal.com" class="sidebar-link">info@panaderiaeltrigal.com</a>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <div class="sidebar-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="sidebar-label">Dirección</p>
+                            <p class="sidebar-text">Calle del Pan, 123<br>28001 Madrid, España</p>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-cta">
+                        <p class="sidebar-cta-text">¿Necesitas un pedido especial para un evento?</p>
+                        <a href="tel:+34912345678" class="btn-sidebar">Llámanos Ahora</a>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="sobre-nosotros" class="about-section">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1627308593341-d886acdc06a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpc2FuJTIwYnJlYWQlMjBiYWtlcnl8ZW58MXx8fHwxNzY0ODkwMTM4fDA&ixlib=rb-4.1.0&q=80&w=1080" alt="Nuestra panadería">
+                    <div class="about-decoration"></div>
+                </div>
+
+                <div class="about-content">
+                    <h2>Sobre Nosotros</h2>
+                    <p class="about-text">
+                        En Panadería El Trigal llevamos más de 30 años elaborando pan artesanal
+                        con la misma pasión y dedicación del primer día. Nuestra familia ha pasado
+                        de generación en generación el arte de la panadería tradicional.
+                    </p>
+                    <p class="about-text">
+                        Utilizamos únicamente ingredientes naturales de la más alta calidad,
+                        respetando los tiempos de fermentación y cocción que hacen de nuestros
+                        productos algo único y especial.
+                    </p>
+
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="feature-title">Ingredientes Naturales</h4>
+                                <p class="feature-text">Sin aditivos ni conservantes artificiales</p>
+                            </div>
+                        </div>
+
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="feature-title">Hecho con Amor</h4>
+                                <p class="feature-text">Cada producto elaborado a mano</p>
+                            </div>
+                        </div>
+
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="8" r="7"></circle>
+                                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="feature-title">Calidad Premium</h4>
+                                <p class="feature-text">Premiados por nuestra excelencia</p>
+                            </div>
+                        </div>
+
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="feature-title">Familia y Tradición</h4>
+                                <p class="feature-text">30 años de experiencia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section id="productos-destacados" class="featured-section">
+        <div class="container">
+            <div class="section-header center">
+                <h2>Productos Destacados</h2>
+                <p>Descubre los productos más populares y amados por nuestros clientes</p>
+            </div>
+
+            <div class="products-grid" id="featuredProductsGrid"></div>
+
+            <div class="center">
+                <a href="#productos" class="btn-large">Ver Todos los Productos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section id="ubicacion" class="location-section">
+        <div class="container">
+            <div class="section-header center">
+                <h2>Visítanos</h2>
+                <p>Te esperamos en nuestra panadería para que disfrutes de nuestros productos recién horneados</p>
+            </div>
+
+            <div class="location-grid">
+                <div class="map-container">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.4997841249516!2d-3.7037902!3d40.4167754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd42287f3b6e1c5b%3A0x5f8a3e9dd9d9c1e4!2sMadrid%2C%20Spain!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
+                        width="100%"
+                        height="100%"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Ubicación de Panadería El Trigal">
+                    </iframe>
+                </div>
+
+                <div class="contact-info">
+                    <h3 class="contact-title">Información de Contacto</h3>
+
+                    <div class="contact-items">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="contact-label">Dirección</h4>
+                                <p class="contact-text">Calle del Pan, 123<br>28001 Madrid, España</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="contact-label">Teléfono</h4>
+                                <a href="tel:+34912345678" class="contact-link">+34 912 345 678</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="contact-label">Horario</h4>
+                                <div class="contact-text">
+                                    <p>Lunes - Viernes: 7:00 AM - 8:00 PM</p>
+                                    <p>Sábados - Domingos: 8:00 AM - 6:00 PM</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-cta">
+                            <a href="https://maps.google.com/?q=Calle+del+Pan+123+Madrid" target="_blank" rel="noopener noreferrer" class="btn-directions">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+                                </svg>
+                                Cómo Llegar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                        </div>
+                        <div class="logo-text">
+                            <span class="footer-logo-primary">Panadería</span>
+                            <span class="footer-logo-secondary"> El Trigal</span>
+                        </div>
+                    </div>
+                    <p class="footer-description">
+                        Elaborando pan artesanal con pasión desde hace más de 30 años.
+                        Tradición, calidad y sabor en cada producto.
+                    </p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h4 class="footer-heading">Enlaces Rápidos</h4>
+                    <ul class="footer-list">
+                        <li><a href="#inicio" class="footer-link">Inicio</a></li>
+                        <li><a href="#sobre-nosotros" class="footer-link">Sobre Nosotros</a></li>
+                        <li><a href="#productos" class="footer-link">Productos</a></li>
+                        <li><a href="#ubicacion" class="footer-link">Ubicación</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4 class="footer-heading">Contacto</h4>
+                    <ul class="footer-list">
+                        <li>Calle del Pan, 123</li>
+                        <li>28001 Madrid, España</li>
+                        <li><a href="tel:+34912345678" class="footer-link">+34 912 345 678</a></li>
+                        <li><a href="mailto:info@panaderiaeltrigal.com" class="footer-link">info@panaderiaeltrigal.com</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Panadería El Trigal. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="panaderia-script.js"></script>
+</body>
+</html>

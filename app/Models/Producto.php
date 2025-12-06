@@ -12,6 +12,11 @@ class Producto extends Model
         'precio',
         'descripcion',
         'imagen',
+        'destacado',
+    ];
+
+    protected $casts = [
+        'destacado' => 'boolean',
     ];
 
     // relación a registros intermedios (opcional)

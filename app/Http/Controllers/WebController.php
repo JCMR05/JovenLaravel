@@ -15,6 +15,13 @@ class WebController extends Controller
         $selectedCategories = $request->input('categories', []);
 
         $categoriasFiltro = Categoria::orderBy('nombre')->get();
+        
+        // Productos destacados (solo los marcados como destacado)
+        $productosDestacados = Producto::with('categorias')
+            ->where('destacado', true)
+            ->orderBy('id', 'desc')
+            ->take(4)
+            ->get();
 
         // Búsqueda
         if (!empty($search)) {
@@ -30,7 +37,7 @@ class WebController extends Controller
 
             $productos = $productosQuery->take(20)->get();
 
-            return view('web.index', compact('productos', 'categoriasFiltro', 'search', 'sort', 'selectedCategories'));
+            return view('web.index', compact('productos', 'categoriasFiltro', 'productosDestacados', 'search', 'sort', 'selectedCategories'));
         }
 
         // Categorías
@@ -48,12 +55,60 @@ class WebController extends Controller
             $categoria->setRelation('productos', $q->take(15)->get());
         }
 
-        return view('web.index', compact('categorias', 'categoriasFiltro', 'search', 'sort', 'selectedCategories'));
+        return view('web.index', compact('categorias', 'categoriasFiltro', 'productosDestacados', 'search', 'sort', 'selectedCategories'));
     }
 
     public function show($id)
     {
         $producto = Producto::with('categorias')->findOrFail($id);
-        return view('web.item', compact('producto'));  // Cambiado de 'web.show' a 'web.item'
+        return view('web.item', compact('producto'));
+    }
+
+    public function tienda(Request $request)
+    {
+        $search = $request->input('search');
+        $sort = $request->input('sort', 'newest');
+        $categoriaId = $request->input('categoria');
+
+        $categorias = Categoria::orderBy('nombre')->get();
+
+        $productosQuery = Producto::with('categorias');
+
+        // Filtro por búsqueda
+        if (!empty($search)) {
+            $productosQuery->where(function($q) use ($search) {
+                $q->where('nombre', 'like', "%{$search}%")
+                  ->orWhere('descripcion', 'like', "%{$search}%");
+            });
+        }
+
+        // Filtro por categoría
+        if (!empty($categoriaId)) {
+            $productosQuery->whereHas('categorias', function($q) use ($categoriaId) {
+                $q->where('categorias.id', $categoriaId);
+            });
+        }
+
+        // Ordenamiento
+        switch ($sort) {
+            case 'priceAsc':
+                $productosQuery->orderBy('precio', 'asc');
+                break;
+            case 'priceDesc':
+                $productosQuery->orderBy('precio', 'desc');
+                break;
+            case 'nameAsc':
+                $productosQuery->orderBy('nombre', 'asc');
+                break;
+            case 'nameDesc':
+                $productosQuery->orderBy('nombre', 'desc');
+                break;
+            default:
+                $productosQuery->orderBy('id', 'desc');
+        }
+
+        $productos = $productosQuery->paginate(12);
+
+        return view('web.tienda', compact('productos', 'categorias', 'search', 'sort', 'categoriaId'));
     }
 }
