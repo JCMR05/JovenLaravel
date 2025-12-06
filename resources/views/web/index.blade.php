@@ -62,9 +62,7 @@
 <div id="productos">
     @if(!empty($productos) || request('search'))
         {{-- RESULTADOS DE BÚSQUEDA --}}
-        @php
-            $productos = $productos ?? collect();
-        @endphp
+        @php $productos = $productos ?? collect(); @endphp
         
         <div class="carousel-section">
             <div class="carousel-container">
@@ -74,47 +72,15 @@
                 </div>
 
                 @if($productos->count() > 0)
-                <div class="carousel-wrapper">
-                    <button class="carousel-btn carousel-btn-prev" data-carousel="search" aria-label="Anterior">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="15 18 9 12 15 6"></polyline>
-                        </svg>
-                    </button>
-                    <button class="carousel-btn carousel-btn-next" data-carousel="search" aria-label="Siguiente">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
-                    </button>
-                    <div class="carousel-content">
-                        <div class="carousel-track" data-carousel="search"></div>
-                    </div>
-                </div>
-                <div class="carousel-dots" data-carousel="search"></div>
+                    @include('web.partials.carousel', ['items' => $productos, 'carouselId' => 'search'])
                 @else
-                <p class="text-center text-muted">No se encontraron productos.</p>
+                    <p class="text-center text-muted">No se encontraron productos.</p>
                 @endif
             </div>
         </div>
 
-        <script>
-            window.carouselData = window.carouselData || {};
-            window.carouselData['search'] = [
-                @foreach($productos as $producto)
-                {
-                    id: {{ $producto->id }},
-                    name: "{{ addslashes($producto->nombre) }}",
-                    category: "{{ $producto->categorias->first()->nombre ?? 'General' }}",
-                    price: {{ $producto->precio }},
-                    description: "{{ addslashes(Str::limit($producto->descripcion ?? 'Delicioso producto artesanal', 80)) }}",
-                    image: "{{ $producto->imagen && filter_var($producto->imagen, FILTER_VALIDATE_URL) ? $producto->imagen : asset('uploads/productos/' . $producto->imagen) }}",
-                    url: "{{ route('web.show', $producto->id) }}"
-                },
-                @endforeach
-            ];
-        </script>
-
     @else
-        {{-- VISTA POR CATEGORÍAS CON CARRUSEL FIGMA --}}
+        {{-- VISTA POR CATEGORÍAS --}}
         @foreach($categorias as $categoria)
             @if($categoria->productos->count() > 0)
             <div class="carousel-section" style="background: {{ $loop->even ? '#fff9f0' : 'linear-gradient(to bottom, #ffffff, #fef3c7)' }};">
@@ -124,41 +90,9 @@
                         <p>Descubre nuestra selección de {{ strtolower($categoria->nombre) }} elaborados artesanalmente.</p>
                     </div>
 
-                    <div class="carousel-wrapper">
-                        <button class="carousel-btn carousel-btn-prev" data-carousel="cat-{{ $categoria->id }}" aria-label="Anterior">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="15 18 9 12 15 6"></polyline>
-                            </svg>
-                        </button>
-                        <button class="carousel-btn carousel-btn-next" data-carousel="cat-{{ $categoria->id }}" aria-label="Siguiente">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="9 18 15 12 9 6"></polyline>
-                            </svg>
-                        </button>
-                        <div class="carousel-content">
-                            <div class="carousel-track" data-carousel="cat-{{ $categoria->id }}"></div>
-                        </div>
-                    </div>
-                    <div class="carousel-dots" data-carousel="cat-{{ $categoria->id }}"></div>
+                    @include('web.partials.carousel', ['items' => $categoria->productos, 'carouselId' => 'cat-'.$categoria->id, 'categoryName' => $categoria->nombre])
                 </div>
             </div>
-
-            <script>
-                window.carouselData = window.carouselData || {};
-                window.carouselData['cat-{{ $categoria->id }}'] = [
-                    @foreach($categoria->productos as $producto)
-                    {
-                        id: {{ $producto->id }},
-                        name: "{{ addslashes($producto->nombre) }}",
-                        category: "{{ $categoria->nombre }}",
-                        price: {{ $producto->precio }},
-                        description: "{{ addslashes(Str::limit($producto->descripcion ?? 'Delicioso producto artesanal', 80)) }}",
-                        image: "{{ asset('uploads/productos/' . $producto->imagen) }}",
-                        url: "{{ route('web.show', $producto->id) }}"
-                    },
-                    @endforeach
-                ];
-            </script>
             @endif
         @endforeach
     @endif
