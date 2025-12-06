@@ -6663,6 +6663,9 @@ textarea.form-control-lg {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .product-name {
