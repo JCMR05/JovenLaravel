@@ -3,23 +3,21 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="title" content="Shop | ArtCode.com" />
         <meta name="author" content="ArtCode" />
         <meta name="description" content="Shop | ArtCode.com"/>
-        <meta name="keywords" content="Shop, ArtCode"
-        />
-        <title>@yield('titulo', 'Shop - UreñaPantoches')</title>
+        <meta name="keywords" content="Shop, ArtCode"/>
+        <title>@yield('titulo', 'Shop - El Parche de Pan')</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-    <!-- Font Awesome (icons used by the design JS) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <!-- Core theme CSS (includes Bootstrap)--> 
-    <link href="{{asset('css/styles.css')}}" rel="stylesheet" />
-    <!-- Custom styles from the Figma design -->
-    <link href="{{asset('css/lapanaderia.css')}}" rel="stylesheet" />
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <!-- Core theme CSS --> 
+        <link href="{{asset('css/styles.css')}}?v={{ time() }}" rel="stylesheet" />
+        <!-- Custom styles -->
+        <link href="{{asset('css/lapanaderia.css')}}?v={{ time() }}" rel="stylesheet" />
         @stack('estilos')
     </head>
     <body>
@@ -29,7 +27,7 @@
         @if(View::hasSection('header'))
             @include('web.partials.header')
         @endif
-        <!-- Search and Filter Section -->
+        <!-- Content -->
         @yield('contenido')
         <!-- Footer-->
         @include('web.partials.footer')

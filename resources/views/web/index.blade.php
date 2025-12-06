@@ -126,8 +126,5 @@
     </div>
 </section>
 
-<link href="{{ asset('css/styles.css') }}?v={{ time() }}" rel="stylesheet">
-<script src="{{ asset('js/scripts.js') }}?v={{ time() }}"></script>
 @endsection
-
 
