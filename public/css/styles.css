@@ -7691,7 +7691,7 @@ textarea.form-control-lg {
 
 /* Imagen del producto */
 .product-image-detail {
-    position: fixed;
+    position: sticky;
     top: 100px;
 }
 
