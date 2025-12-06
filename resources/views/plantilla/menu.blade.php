@@ -2,7 +2,7 @@
     <!--begin::Sidebar Brand-->
     <div class="sidebar-brand">
         <!--begin::Brand Link-->
-        <a href="http://127.0.0.1:8000" class="brand-link">
+        <a href="https://rosybrown-cormorant-662600.hostingersite.com" class="brand-link">
             <!--begin::Brand Image-->
             <img src="{{asset('assets/img/AdminLTELogo.png')}}" alt="AdminLTE Logo"
                 class="brand-image opacity-75 shadow" />
