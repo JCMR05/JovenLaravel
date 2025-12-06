@@ -5937,6 +5937,7 @@ textarea.form-control-lg {
     gap: 1.5rem;
     opacity: 1;
     transition: opacity 0.5s ease, transform 0.5s ease;
+    grid-template-columns: repeat(3, 1fr); /* AGREGAR ESTA LÍNEA - valor por defecto */
 }
 
 .carousel-track.fade-out {
@@ -6064,21 +6065,27 @@ textarea.form-control-lg {
     background: #d97706;
 }
 
-/* Responsive */
-@media (min-width: 1024px) {
-    .carousel-track { grid-template-columns: repeat(3, 1fr); }
-}
-
-@media (min-width: 640px) and (max-width: 1023px) {
-    .carousel-track { grid-template-columns: repeat(2, 1fr); }
-}
-
+/* Responsive - cambiar el orden (mobile first) */
 @media (max-width: 639px) {
-    .carousel-track { grid-template-columns: 1fr; }
+    .carousel-track { 
+        grid-template-columns: 1fr; 
+    }
     .carousel-header h2 { font-size: 2rem; }
     .carousel-content { padding: 0 2rem; }
     .carousel-btn-prev { left: -0.5rem; }
     .carousel-btn-next { right: -0.5rem; }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+    .carousel-track { 
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+@media (min-width: 1024px) {
+    .carousel-track { 
+        grid-template-columns: repeat(3, 1fr); 
+    }
 }
 
 /* Offset para secciones con anchor links */
