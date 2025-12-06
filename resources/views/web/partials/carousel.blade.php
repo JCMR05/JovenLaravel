@@ -1,3 +1,4 @@
+<?php
 @php
     $perPage = 3;
     $totalItems = $items->count();
@@ -5,7 +6,27 @@
     $firstPageItems = $items->take($perPage);
 @endphp
 
-<div class="carousel-wrapper">
+{{-- Datos para JavaScript PRIMERO --}}
+@if($totalPages > 1)
+<script>
+    window.carouselData = window.carouselData || {};
+    window.carouselData['{{ $carouselId }}'] = [
+        @foreach($items as $producto)
+        {
+            id: {{ $producto->id }},
+            name: "{{ addslashes($producto->nombre) }}",
+            category: "{{ $categoryName ?? ($producto->categorias->first()->nombre ?? 'General') }}",
+            price: {{ $producto->precio }},
+            description: "{{ addslashes(Str::limit($producto->descripcion ?? 'Delicioso producto artesanal', 80)) }}",
+            image: "{{ asset('uploads/productos/' . $producto->imagen) }}",
+            url: "{{ route('web.show', $producto->id) }}"
+        }{{ !$loop->last ? ',' : '' }}
+        @endforeach
+    ];
+</script>
+@endif
+
+<div class="carousel-wrapper" id="carousel-wrapper-{{ $carouselId }}">
     @if($totalPages > 1)
     <button class="carousel-btn carousel-btn-prev" data-carousel="{{ $carouselId }}" aria-label="Anterior" disabled>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -21,7 +42,6 @@
 
     <div class="carousel-content">
         <div class="carousel-track" data-carousel="{{ $carouselId }}">
-            {{-- Renderizar primeras tarjetas directamente en HTML --}}
             @foreach($firstPageItems as $producto)
             <div class="product-card">
                 <div class="product-image">
@@ -47,21 +67,22 @@
     @endfor
 </div>
 
-{{-- Datos para JavaScript (para navegación) --}}
+{{-- Inicializar este carrusel inmediatamente --}}
 <script>
-    window.carouselData = window.carouselData || {};
-    window.carouselData['{{ $carouselId }}'] = [
-        @foreach($items as $producto)
-        {
-            id: {{ $producto->id }},
-            name: "{{ addslashes($producto->nombre) }}",
-            category: "{{ $categoryName ?? ($producto->categorias->first()->nombre ?? 'General') }}",
-            price: {{ $producto->precio }},
-            description: "{{ addslashes(Str::limit($producto->descripcion ?? 'Delicioso producto artesanal', 80)) }}",
-            image: "{{ asset('uploads/productos/' . $producto->imagen) }}",
-            url: "{{ route('web.show', $producto->id) }}"
-        },
-        @endforeach
-    ];
+(function() {
+    function initThisCarousel() {
+        if (typeof initCarousel === 'function' && window.carouselData && window.carouselData['{{ $carouselId }}']) {
+            initCarousel('{{ $carouselId }}', window.carouselData['{{ $carouselId }}']);
+        }
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(initThisCarousel, 100);
+        });
+    } else {
+        setTimeout(initThisCarousel, 100);
+    }
+})();
 </script>
 @endif
