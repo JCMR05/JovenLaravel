@@ -6608,7 +6608,6 @@ textarea.form-control-lg {
     max-height: 380px;
     min-height: 380px;
     width: 100%;
-    max-width: 320px; /* Ancho máximo para evitar que se expandan */
 }
 
 .product-card:hover {
@@ -6769,27 +6768,17 @@ textarea.form-control-lg {
     .carousel-btn-next { 
         right: -0.5rem; 
     }
-    .product-card {
-        max-width: 100%;
-        margin: 0 auto;
-    }
 }
 
 @media (min-width: 640px) and (max-width: 1023px) {
     .carousel-track { 
         grid-template-columns: repeat(2, 1fr) !important; 
     }
-    .product-card {
-        max-width: 100%;
-    }
 }
 
 @media (min-width: 1024px) {
     .carousel-track { 
         grid-template-columns: repeat(3, 1fr) !important; 
-    }
-    .product-card {
-        max-width: 320px;
     }
 }
 
