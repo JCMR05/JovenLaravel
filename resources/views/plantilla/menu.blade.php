@@ -4,11 +4,10 @@
         <!--begin::Brand Link-->
         <a href="https://rosybrown-cormorant-662600.hostingersite.com" class="brand-link">
             <!--begin::Brand Image-->
-            <img src="{{asset('assets/img/AdminLTELogo.png')}}" alt="AdminLTE Logo"
-                class="brand-image opacity-75 shadow" />
+            <img src="{{ asset('uploads/productos/ok7.png') }}" alt="Logo" style="height: 30px;">
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">Sistema</span>
+            <span class="brand-text fw-light">El Parche de Pan</span>
             <!--end::Brand Text-->
         </a>
         <!--end::Brand Link-->
@@ -23,7 +22,7 @@
                     <a href="{{route('dashboard')}}" class="nav-link" id="mnuDashboard">
                         <i class="nav-icon bi bi-speedometer"></i>
                         <p>
-                            Dashboard
+                            Estadisticas
                         </p>
                     </a>
                 </li>

@@ -76,14 +76,14 @@
       <!--begin::Footer-->
       <footer class="app-footer">
         <!--begin::To the end-->
-        <div class="float-end d-none d-sm-inline">Anything you want</div>
+        <div class="float-end d-none d-sm-inline">baker admin</div>
         <!--end::To the end-->
         <!--begin::Copyright-->
         <strong>
           Copyright &copy; 2025&nbsp;
-          <a href="#" class="text-decoration-none">UreñaPantoches</a>.
+          <a href="#" class="text-decoration-none">El Parche de Pan</a>.
         </strong>
-        All rights reserved.
+        Todos los derechos reservados.
         <!--end::Copyright-->
       </footer>
       <!--end::Footer-->
