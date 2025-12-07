@@ -843,3 +843,138 @@ function initCarousel(id, products) {
     startAutoplay();
 }
 
+/* ============================
+   PERFIL - Avatar y Edición
+   ============================ */
+
+// Avatar definitions
+const perfilAvatars = [
+    { id: 'avatar-1', gradient: 'linear-gradient(to bottom right, #fbbf24, #d97706)', icon: '🍞', name: 'Pan Dorado' },
+    { id: 'avatar-2', gradient: 'linear-gradient(to bottom right, #fb923c, #ef4444)', icon: '🥐', name: 'Croissant' },
+    { id: 'avatar-3', gradient: 'linear-gradient(to bottom right, #f472b6, #f43f5e)', icon: '🧁', name: 'Cupcake' },
+    { id: 'avatar-4', gradient: 'linear-gradient(to bottom right, #60a5fa, #4f46e5)', icon: '🎂', name: 'Pastel' },
+    { id: 'avatar-5', gradient: 'linear-gradient(to bottom right, #a78bfa, #ec4899)', icon: '🍰', name: 'Tarta' }
+];
+
+let selectedAvatar = localStorage.getItem('userAvatar') || 'avatar-1';
+
+// Initialize Perfil
+document.addEventListener('DOMContentLoaded', function() {
+    // Solo ejecutar si estamos en la página de perfil
+    if (document.getElementById('userAvatar')) {
+        loadAvatar();
+        
+        // Cerrar modal al hacer clic fuera
+        const avatarModal = document.getElementById('avatarModal');
+        if (avatarModal) {
+            avatarModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeAvatarSelector();
+                }
+            });
+        }
+    }
+});
+
+function loadAvatar() {
+    const avatar = perfilAvatars.find(a => a.id === selectedAvatar) || perfilAvatars[0];
+    const avatarEl = document.getElementById('userAvatar');
+    if (avatarEl) {
+        avatarEl.style.background = avatar.gradient;
+        avatarEl.textContent = avatar.icon;
+    }
+}
+
+function toggleEdit(isEditing) {
+    const editButtons = document.getElementById('editButtons');
+    const saveButtons = document.getElementById('saveButtons');
+    const passwordSection = document.getElementById('passwordSection');
+    
+    if (editButtons) editButtons.style.display = isEditing ? 'none' : 'block';
+    if (saveButtons) saveButtons.style.display = isEditing ? 'flex' : 'none';
+    if (passwordSection) passwordSection.style.display = isEditing ? 'block' : 'none';
+    
+    const fields = ['name', 'email'];
+    fields.forEach(field => {
+        const display = document.getElementById(`${field}Display`);
+        const input = document.getElementById(`${field}Input`);
+        if (display) display.style.display = isEditing ? 'none' : 'block';
+        if (input) input.style.display = isEditing ? 'block' : 'none';
+    });
+}
+
+function openAvatarSelector() {
+    const modal = document.getElementById('avatarModal');
+    const grid = document.getElementById('avatarGrid');
+    
+    if (!modal || !grid) return;
+    
+    grid.innerHTML = '';
+    perfilAvatars.forEach(avatar => {
+        const option = document.createElement('div');
+        option.className = 'avatar-option' + (avatar.id === selectedAvatar ? ' selected' : '');
+        option.onclick = () => selectAvatar(avatar.id);
+        
+        option.innerHTML = `
+
+            <div class="option-avatar" style="background: ${avatar.gradient}">${avatar.icon}</div>
+            <span class="avatar-name">${avatar.name}</span>
+            ${avatar.id === selectedAvatar ? '<div class="check-badge"><i class="bi bi-check-lg"></i></div>' : ''}
+        `;
+        
+        grid.appendChild(option);
+    });
+    
+    modal.classList.add('active');
+}
+
+function closeAvatarSelector() {
+    const modal = document.getElementById('avatarModal');
+    if (modal) modal.classList.remove('active');
+}
+
+function selectAvatar(avatarId) {
+    selectedAvatar = avatarId;
+    
+    // Update UI
+    document.querySelectorAll('.avatar-option').forEach(opt => {
+        opt.classList.remove('selected');
+        const badge = opt.querySelector('.check-badge');
+        if (badge) badge.remove();
+    });
+    
+    const options = document.querySelectorAll('.avatar-option');
+    options.forEach(option => {
+        const avatarEl = option.querySelector('.option-avatar');
+        const avatar = perfilAvatars.find(a => a.icon === avatarEl.textContent);
+        if (avatar && avatar.id === avatarId) {
+            option.classList.add('selected');
+            option.innerHTML += '<div class="check-badge"><i class="bi bi-check-lg"></i></div>';
+        }
+    });
+}
+
+function saveAvatar() {
+    localStorage.setItem('userAvatar', selectedAvatar);
+    loadAvatar();
+    closeAvatarSelector();
+    showPerfilToast('Avatar actualizado', 'Tu avatar ha sido cambiado correctamente');
+}
+
+function showPerfilToast(title, description) {
+    const toast = document.getElementById('perfilToast');
+    const toastTitle = document.getElementById('toastTitle');
+    const toastDescription = document.getElementById('toastDescription');
+    
+    if (!toast) return;
+    
+    if (toastTitle) toastTitle.textContent = title;
+    if (toastDescription) toastDescription.textContent = description;
+    
+    toast.classList.add('active');
+    
+    setTimeout(() => {
+        toast.classList.remove('active');
+    }, 3000);
+}
+
