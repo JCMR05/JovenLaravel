@@ -51,7 +51,7 @@ Route::middleware(['auth'])->group(function(){
 
 Route::middleware('auth')->group(function () {
     Route::get('/mi-perfil', [WebController::class, 'perfil'])->name('perfil');
-    Route::put('/mi-perfil', [WebController::class, 'perfilUpdate'])->name('perfil.update');
+    Route::put('/mi-perfil', [WebController::class, 'perfilUpdate'])->name('web.perfil.update');
 });
 
 // Registro visible para no autenticados
