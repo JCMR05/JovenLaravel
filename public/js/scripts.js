@@ -788,7 +788,7 @@ function initCarousel(id, products) {
 
     function startAutoplay() {
         if (totalSlides() > 1) {
-            autoplay = setInterval(next, 5000);
+            autoplay = setInterval(next, 7000);
         }
     }
 

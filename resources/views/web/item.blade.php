@@ -40,7 +40,11 @@
             {{-- Información del producto --}}
             <div class="product-info-detail">
                 @if($producto->categorias->count() > 0)
-                    <span class="product-category-detail">{{ $producto->categorias->first()->nombre }}</span>
+                    <div class="product-categories-detail">
+                        @foreach($producto->categorias as $categoria)
+                            <a href="{{ route('web.tienda', ['categoria' => $categoria->id]) }}" class="product-category-detail">{{ $categoria->nombre }}</a>
+                        @endforeach
+                    </div>
                 @endif
 
                 <h1 class="product-name-detail">{{ $producto->nombre }}</h1>

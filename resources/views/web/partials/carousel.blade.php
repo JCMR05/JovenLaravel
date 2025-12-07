@@ -1,4 +1,3 @@
-
 @php
     $perPage = 3;
     $totalItems = $items->count();
@@ -21,7 +20,7 @@
     @endif
 
     <div class="carousel-content">
-        <div class="carousel-track" data-carousel="{{ $carouselId }}" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+        <div class="carousel-track" data-carousel="{{ $carouselId }}">
             @foreach($firstPageItems as $producto)
             <div class="product-card">
                 <div class="product-image">
