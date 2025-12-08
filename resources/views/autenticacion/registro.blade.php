@@ -1,79 +1,141 @@
 @extends('autenticacion.app')
-@section('titulo', 'Sistema - Registro')
-@section('contenido')
-<div class="card card-outline card-login">
-  <div class="card-header">
-    <a
-      href="/"
-      class="link-dark text-center  link-opacity-100 link-opacity-75-hover"
-    >
-      <h1 class="mb-0"><b>El Parche de Pan</b> Registro</h1>
-    </a>
-  </div>
-  <div class="card-body login-card-body">
-    <p class="login-box-msg">Agrega tus datos para registrarte</p>
-    @if(session('error'))
-      <div class="alert alert-danger">
-        {{session('error')}}
-      </div>
-    @endif
-    <form action="{{route('registro.store')}}" method="post">
-      @csrf
-      <div class="input-group mb-1">
-        <div class="form-floating">
-          <input id="name" type="text" name="name" value="{{old('name')}}" class="form-control @error('name') is-invalid @enderror" placeholder="Ingrese nombre" />
-          <label for="name">Nombre</label>
+@section('titulo', 'Crear Cuenta - El Parche de Pan')
+
+@section('auth-content')
+<div class="auth-wrapper">
+    <!-- Benefits Panel -->
+    <div class="auth-benefits">
+        <h2>Bienvenido a El Parche de Pan</h2>
+        <p>Accede a tu cuenta para disfrutar de todas las ventajas</p>
+        
+        <div class="benefit-list">
+            <div class="benefit-item">
+                <div class="benefit-icon"><i class="bi bi-check-lg"></i></div>
+                <div class="benefit-text">
+                    <h4>Guarda tus productos favoritos</h4>
+                    <p>Marca tus panes preferidos y accede a ellos fácilmente</p>
+                </div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon"><i class="bi bi-check-lg"></i></div>
+                <div class="benefit-text">
+                    <h4>Realiza pedidos más rápido</h4>
+                    <p>Tu información guardada para compras más rápidas</p>
+                </div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon"><i class="bi bi-check-lg"></i></div>
+                <div class="benefit-text">
+                    <h4>Consulta tu historial</h4>
+                    <p>Revisa todos tus pedidos anteriores</p>
+                </div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon"><i class="bi bi-check-lg"></i></div>
+                <div class="benefit-text">
+                    <h4>Acumula puntos</h4>
+                    <p>Gana puntos por cada compra que realices</p>
+                </div>
+            </div>
         </div>
-        <div class="input-group-text"><span class="bi bi-envelope"></span></div>
-        @error('name')
-          <div class="invalid-feedback d-block">{{ $message }}</div>
-        @enderror
-      </div>
-      <div class="input-group mb-1">
-        <div class="form-floating">
-          <input id="loginEmail" type="email" name="email" value="{{old('email')}}" class="form-control @error('email') is-invalid @enderror" placeholder="" />
-          <label for="loginEmail">Email</label>
+    </div>
+
+    <!-- Form Panel -->
+    <div class="auth-form-panel">
+        <!-- Tabs -->
+        <div class="auth-tabs">
+            <a href="{{ route('login') }}" class="auth-tab">Iniciar Sesión</a>
+            <a href="{{ route('registro.create') }}" class="auth-tab active">Crear Cuenta</a>
         </div>
-        <div class="input-group-text"><span class="bi bi-envelope"></span></div>
-        @error('email')
-          <div class="invalid-feedback d-block">{{ $message }}</div>
-        @enderror
-      </div>
-      <div class="input-group mb-1">
-        <div class="form-floating">
-          <input id="loginPassword" type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="" />
-          <label for="loginPassword">Password</label>
-        </div>
-        <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
-        @error('password')
-          <div class="invalid-feedback d-block">{{ $message }}</div>
-        @enderror
-      </div>
-      <div class="input-group mb-1">
-        <div class="form-floating">
-          <input id="password_confirmation" type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="" />
-          <label for="password_confirmation">Confirme su password</label>
-        </div>
-        <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
-        @error('password_confirmation')
-          <div class="invalid-feedback d-block">{{ $message }}</div>
-        @enderror
-      </div>
-      <!--begin::Row-->
-      <div class="row">
-        <!-- /.col -->
-        <div class="col-4">
-          <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-login">Registrar</button>
-          </div>
-        </div>
-        <!-- /.col -->
-      </div>
-      <!--end::Row-->
-    </form>
-    <!-- /.social-auth-links -->
-  </div>
-  <!-- /.login-card-body -->
+
+        <h2 class="form-title">Crear Cuenta</h2>
+        <p class="form-subtitle">Completa tus datos para registrarte</p>
+
+        <!-- Alerts -->
+        @if(session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+
+        <!-- Form -->
+        <form action="{{ route('registro.store') }}" method="POST">
+            @csrf
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="bi bi-person"></i> Nombre Completo
+                </label>
+                <input 
+                    type="text" 
+                    name="name" 
+                    value="{{ old('name') }}" 
+                    class="form-input @error('name') is-invalid @enderror" 
+                    placeholder="Juan Pérez"
+                >
+                @error('name')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="bi bi-envelope"></i> Correo Electrónico
+                </label>
+                <input 
+                    type="email" 
+                    name="email" 
+                    value="{{ old('email') }}" 
+                    class="form-input @error('email') is-invalid @enderror" 
+                    placeholder="tu@email.com"
+                >
+                @error('email')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="bi bi-lock"></i> Contraseña
+                </label>
+                <div class="password-wrapper">
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="password"
+                        class="form-input @error('password') is-invalid @enderror" 
+                        placeholder="••••••••"
+                    >
+                    <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                        <i class="bi bi-eye" id="password-icon"></i>
+                    </button>
+                </div>
+                @error('password')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="bi bi-lock-fill"></i> Confirmar Contraseña
+                </label>
+                <div class="password-wrapper">
+                    <input 
+                        type="password" 
+                        name="password_confirmation" 
+                        id="password_confirmation"
+                        class="form-input" 
+                        placeholder="••••••••"
+                    >
+                    <button type="button" class="password-toggle" onclick="togglePassword('password_confirmation')">
+                        <i class="bi bi-eye" id="password_confirmation-icon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Crear Cuenta</button>
+        </form>
+
+        <a href="{{ route('home') }}" class="guest-link">Continuar como invitado →</a>
+    </div>
 </div>
 @endsection
 
