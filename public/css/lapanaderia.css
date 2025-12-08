@@ -4,12 +4,15 @@
 */
 
 :root{
-  --lp-primary: #FF6A00;
-  --lp-primary-hover: #FF5400;
-  --lp-secondary: #DEE4DD;
-  --lp-text-dark: #1C221B;
+  /* Palette adapted from Perfil styles */
+  --lp-primary: #d97706; /* orange accent */
+  --lp-primary-hover: #b45309;
+  --lp-accent-dark: #78350f; /* heading / strong text */
+  --lp-highlight: #fef3c7; /* pale yellow background */
+  --lp-secondary: #fde68a;
+  --lp-text-dark: #78350f;
   --lp-white: #ffffff;
-  --lp-border: #c5ccc4;
+  --lp-border: #fde68a;
   --lp-shadow: 0 1px 3px rgba(28,34,27,0.08);
 }
 
@@ -41,7 +44,7 @@
 .hero-title{font-size:2.75rem;font-weight:700;line-height:1.05}
 .hero-subtitle{font-size:1.125rem;opacity:0.95}
 .hero .btn-primary{background-color:var(--lp-primary);border-color:var(--lp-primary)}
-.hero .btn-primary:hover{background-color:var(--lp-primary-hover)}
+.hero .btn-primary:hover{background-color:var(--lp-primary-hover);}
 .hero .btn-outline{color:var(--lp-white);border:1px solid rgba(255,255,255,0.5)}
 
 /* Centering helpers: ensure main blocks are centered horizontally */
@@ -171,22 +174,22 @@ html.dark-mode .footer{background:#111;color:#ddd}
 }
 
 .cart-header-section h1 {
-  color: var(--lp-text-dark);
+  color: var(--lp-accent-dark);
   font-weight: 700;
 }
 
 .cart-header-section #cartCount {
   font-size: 0.95rem;
-  color: #6c757d;
+  color: #b45309;
 }
 
 /* Cart Item Card */
 .cart-item-card {
   background-color: var(--lp-white);
-  border: 1px solid var(--lp-border);
+  border: 1px solid rgba(217,151,6,0.10);
   border-radius: 0.75rem;
   padding: 1.25rem;
-  box-shadow: var(--lp-shadow);
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.06);
   transition: all 0.25s ease;
 }
 
@@ -206,7 +209,7 @@ html.dark-mode .footer{background:#111;color:#ddd}
   height: 100px;
   border-radius: 0.5rem;
   overflow: hidden;
-  background-color: #f5f5f5;
+  background: linear-gradient(135deg, var(--lp-highlight), #fff);
 }
 
 .cart-item-image img {
@@ -287,7 +290,7 @@ html.dark-mode .footer{background:#111;color:#ddd}
 .empty-cart-state {
   text-align: center;
   padding: 3rem 2rem;
-  background-color: #f9f9f9;
+  background: var(--lp-highlight);
   border: 2px dashed var(--lp-border);
   border-radius: 1rem;
 }
@@ -299,7 +302,7 @@ html.dark-mode .footer{background:#111;color:#ddd}
 
 .empty-icon {
   font-size: 4rem;
-  color: var(--lp-border);
+  color: #d97706;
   margin-bottom: 1rem;
 }
 
@@ -331,16 +334,16 @@ html.dark-mode .footer{background:#111;color:#ddd}
 /* Order Summary Card */
 .order-summary-card {
   background-color: var(--lp-white);
-  border: 1px solid var(--lp-border);
+  border: 1px solid rgba(217,151,6,0.08);
   border-radius: 0.75rem;
   padding: 1.75rem;
-  box-shadow: var(--lp-shadow);
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.06);
   position: sticky;
   top: 80px;
 }
 
 .summary-title {
-  color: var(--lp-text-dark);
+  color: var(--lp-accent-dark);
   font-weight: 700;
 }
 
@@ -396,6 +399,7 @@ html.dark-mode .footer{background:#111;color:#ddd}
 .summary-actions .btn-primary {
   background-color: var(--lp-primary);
   border-color: var(--lp-primary);
+  transition: background 0.3s;
 }
 
 .summary-actions .btn-primary:hover {

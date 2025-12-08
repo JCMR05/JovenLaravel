@@ -1,7 +1,7 @@
 @extends('web.app')
 @section('contenido')
 <!-- Carrito Section -->
-<section class="py-5">
+<section class="perfil-page-wrapper py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="cart-header-section mb-5">
             <h1 class="fw-bold mb-2">Mi Carrito</h1>
@@ -88,10 +88,10 @@
 
                 @if (count($carrito) > 0)
                 <div class="cart-actions mt-4">
-                    <a href="/" class="btn btn-outline-secondary">
+                    <a href="/" class="btn perfil-btn perfil-btn-logout">
                         <i class="fas fa-arrow-left me-2"></i>Continuar comprando
                     </a>
-                    <a href="{{ route('carrito.vaciar') }}" class="btn btn-outline-danger">
+                    <a href="{{ route('carrito.vaciar') }}" class="btn perfil-btn perfil-btn-favorites">
                         <i class="fas fa-trash me-2"></i>Vaciar carrito
                     </a>
                 </div>
