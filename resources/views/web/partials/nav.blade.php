@@ -17,15 +17,18 @@
                         {{ Auth::user()->name }}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{ route('perfil') }}">Mi Perfil</a></li>
-                        @can ( "producto-list")
-                        <li><a class="dropdown-item" href="{{ route('dashboard') }}">Panel Administrador</a></li>
+                        <li><a class="dropdown-item" href="{{ route('perfil') }}"><i class="bi bi-person-circle me-2"></i>Mi Perfil</a></li>
+                        <li><a class="dropdown-item" href="{{ route('favoritos.index') }}"><i class="bi bi-heart me-2"></i>Mis Favoritos</a></li>
+                        <li><a class="dropdown-item" href="{{ route('mis-pedidos') }}"><i class="bi bi-box-seam me-2"></i>Mis Pedidos</a></li>
+                        @can("producto-list")
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ route('dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Panel Administrador</a></li>
                         @endcan
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="dropdown-item">Cerrar Sesión</button>
+                                <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión</button>
                             </form>
                         </li>
                     </ul>

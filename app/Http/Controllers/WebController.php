@@ -116,12 +116,14 @@ class WebController extends Controller
     {
         $user = auth()->user();
         
-        // Contar pedidos del usuario (ajusta según tu modelo)
+        // Contar pedidos del usuario
         $pedidos = \App\Models\Pedido::where('user_id', $user->id)->count();
         
-        // Favoritos y puntos (puedes implementarlos después)
-        $favoritos = 0;
-        $puntos = 0;
+        // Contar favoritos del usuario
+        $favoritos = \App\Models\Favorito::where('user_id', $user->id)->count();
+        
+        // Obtener puntos del usuario
+        $puntos = $user->puntos ?? 0;
         
         return view('web.perfil', compact('user', 'pedidos', 'favoritos', 'puntos'));
     }
@@ -146,5 +148,18 @@ class WebController extends Controller
         $user->save();
         
         return redirect()->route('perfil')->with('status', 'Perfil actualizado correctamente');
+    }
+
+    public function misPedidos()
+    {
+        $user = auth()->user();
+        $pedidos = $user->pedidos()
+                        ->with('detalles.producto')
+                        ->orderBy('created_at', 'desc')
+                        ->paginate(10);
+        
+        $totalPedidos = $user->pedidos()->count();
+
+        return view('web.mis-pedidos', compact('pedidos', 'totalPedidos'));
     }
 }

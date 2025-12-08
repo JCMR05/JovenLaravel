@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="title" content="Shop | ArtCode.com" />
         <meta name="author" content="ArtCode" />
         <meta name="description" content="Shop | ArtCode.com"/>

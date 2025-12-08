@@ -1,4 +1,3 @@
-
 @extends('web.layouts.app')
 
 @section('titulo', 'Mi Perfil')
@@ -77,10 +76,16 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <a href="{{ route('web.tienda') }}" class="perfil-btn perfil-btn-favorites mt-3">
-                    <i class="bi bi-heart-fill"></i>
-                    Ver Tienda
+                <a href="{{ route('favoritos.index') }}" class="perfil-btn perfil-btn-favorites mt-3">
+                    <i class="bi bi-heart"></i>
+                    Ver Favoritos
                 </a>
+                
+                <a href="{{ route('mis-pedidos') }}" class="perfil-btn perfil-btn-pedidos">
+                    <i class="bi bi-box-seam"></i>
+                    Mis Pedidos
+                </a>
+                
                 <form action="{{ route('logout') }}" method="POST" class="m-0">
                     @csrf
                     <button type="submit" class="perfil-btn perfil-btn-logout">

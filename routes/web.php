@@ -13,6 +13,7 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\PedidoController;
+use App\Http\Controllers\FavoritoController;
 
 // Ruta principal
 Route::get('/', [WebController::class, 'index'])->name('home');
@@ -49,9 +50,19 @@ Route::middleware(['auth'])->group(function(){
     Route::put('/perfil', [PerfilController::class, 'update'])->name('perfil.update');
 });
 
+// Rutas de usuario autenticado (sin permisos especiales)
 Route::middleware('auth')->group(function () {
     Route::get('/mi-perfil', [WebController::class, 'perfil'])->name('perfil');
     Route::put('/mi-perfil', [WebController::class, 'perfilUpdate'])->name('web.perfil.update');
+    
+    // Rutas de Favoritos
+    Route::get('/favoritos', [FavoritoController::class, 'index'])->name('favoritos.index');
+    Route::post('/favoritos/toggle', [FavoritoController::class, 'toggle'])->name('favoritos.toggle');
+    Route::delete('/favoritos/{producto}', [FavoritoController::class, 'destroy'])->name('favoritos.destroy');
+    Route::delete('/favoritos-limpiar', [FavoritoController::class, 'limpiar'])->name('favoritos.limpiar');
+    
+    // Ruta de Mis Pedidos
+    Route::get('/mis-pedidos', [WebController::class, 'misPedidos'])->name('mis-pedidos');
 });
 
 // Registro visible para no autenticados

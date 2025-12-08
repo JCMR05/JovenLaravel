@@ -34,6 +34,21 @@
                             Destacado
                         </span>
                     @endif
+
+                    {{-- Botón de Favoritos --}}
+                    @auth
+                        <button type="button" 
+                                class="btn-favorito-detail {{ Auth::user()->tieneEnFavoritos($producto->id) ? 'active' : '' }}" 
+                                id="btnFavorito"
+                                onclick="toggleFavorito({{ $producto->id }})"
+                                title="{{ Auth::user()->tieneEnFavoritos($producto->id) ? 'Quitar de favoritos' : 'Añadir a favoritos' }}">
+                            <i class="bi bi-heart{{ Auth::user()->tieneEnFavoritos($producto->id) ? '-fill' : '' }}"></i>
+                        </button>
+                    @else
+                        <a href="{{ route('login') }}" class="btn-favorito-detail" title="Inicia sesión para guardar favoritos">
+                            <i class="bi bi-heart"></i>
+                        </a>
+                    @endauth
                 </div>
             </div>
 
@@ -114,6 +129,23 @@
                             </svg>
                             Agregar al Carrito
                         </button>
+                        
+                        {{-- Botón de favoritos inline --}}
+                        @auth
+                            <button type="button" 
+                                    class="btn-favorito-inline {{ Auth::user()->tieneEnFavoritos($producto->id) ? 'active' : '' }}" 
+                                    id="btnFavoritoInline"
+                                    onclick="toggleFavorito({{ $producto->id }})">
+                                <i class="bi bi-heart{{ Auth::user()->tieneEnFavoritos($producto->id) ? '-fill' : '' }}"></i>
+                                <span>{{ Auth::user()->tieneEnFavoritos($producto->id) ? 'En Favoritos' : 'Favoritos' }}</span>
+                            </button>
+                        @else
+                            <a href="{{ route('login') }}" class="btn-favorito-inline">
+                                <i class="bi bi-heart"></i>
+                                <span>Favoritos</span>
+                            </a>
+                        @endauth
+                        
                         <a href="{{ route('web.tienda') }}" class="btn-back">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -201,6 +233,63 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Toggle Favoritos
+function toggleFavorito(productoId) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+    
+    fetch('/favoritos/toggle', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ producto_id: productoId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Actualizar botón en imagen
+            const btnDetail = document.getElementById('btnFavorito');
+            if (btnDetail) {
+                btnDetail.classList.toggle('active', data.isFavorito);
+                btnDetail.querySelector('i').className = data.isFavorito ? 'bi bi-heart-fill' : 'bi bi-heart';
+                btnDetail.title = data.isFavorito ? 'Quitar de favoritos' : 'Añadir a favoritos';
+            }
+            
+            // Actualizar botón inline
+            const btnInline = document.getElementById('btnFavoritoInline');
+            if (btnInline) {
+                btnInline.classList.toggle('active', data.isFavorito);
+                btnInline.querySelector('i').className = data.isFavorito ? 'bi bi-heart-fill' : 'bi bi-heart';
+                btnInline.querySelector('span').textContent = data.isFavorito ? 'En Favoritos' : 'Favoritos';
+            }
+            
+            mostrarToast(data.mensaje, 'success');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarToast('Error al actualizar favoritos', 'error');
+    });
+}
+
+function mostrarToast(mensaje, tipo = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast-notification toast-${tipo}`;
+    toast.innerHTML = `
+        <i class="bi bi-${tipo === 'success' ? 'check-circle-fill' : 'exclamation-circle-fill'}"></i>
+        <span>${mensaje}</span>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
 </script>
 @endpush
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pedido;
 use App\Models\PedidoDetalle;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -47,21 +48,42 @@ class PedidoController extends Controller
             foreach ($carrito as $item) {
                 $total += $item['precio'] * $item['cantidad'];
             }
+            
             // 2. Crear el pedido
             $pedido = Pedido::create([
-                'user_id' => auth()->id(), 'total' => $total, 'estado' => 'pendiente'
+                'user_id' => auth()->id(), 
+                'total' => $total, 
+                'estado' => 'pendiente'
             ]);
+            
             // 3. Crear los detalles del pedido
             foreach ($carrito as $productoId => $item) {
                 PedidoDetalle::create([
-                    'pedido_id' => $pedido->id, 'producto_id' => $productoId,
-                    'cantidad' => $item['cantidad'], 'precio' => $item['precio'],
+                    'pedido_id' => $pedido->id, 
+                    'producto_id' => $productoId,
+                    'cantidad' => $item['cantidad'], 
+                    'precio' => $item['precio'],
                 ]);
             }
-            // 4. Vaciar el carrito de la sesión
+            
+            // 4. Calcular y otorgar puntos al usuario (1 punto por cada $100)
+            $puntosGanados = User::calcularPuntos($total);
+            if ($puntosGanados > 0) {
+                auth()->user()->agregarPuntos($puntosGanados);
+            }
+            
+            // 5. Vaciar el carrito de la sesión
             session()->forget('carrito');
+            
             DB::commit();
-            return redirect()->route('carrito.mostrar')->with('mensaje', 'Pedido realizado correctamente.');
+            
+            // Mensaje con puntos ganados
+            $mensaje = 'Pedido realizado correctamente.';
+            if ($puntosGanados > 0) {
+                $mensaje .= " ¡Ganaste {$puntosGanados} puntos!";
+            }
+            
+            return redirect()->route('carrito.mostrar')->with('mensaje', $mensaje);
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Hubo un error al procesar el pedido.');
