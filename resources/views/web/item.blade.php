@@ -201,6 +201,87 @@
     </div>
 </section>
 
+{{-- Sección de Productos Relacionados --}}
+@if(isset($productosRelacionados) && $productosRelacionados->count() > 0)
+<section class="related-products-section">
+    <div class="container">
+        <div class="related-header">
+            <h2 class="related-title">Productos Relacionados</h2>
+            <p class="related-subtitle">Descubre más productos que te pueden interesar</p>
+        </div>
+        
+        <div class="related-carousel">
+            <button class="related-carousel-btn related-prev" onclick="moveRelatedCarousel(-1)" aria-label="Anterior">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            
+            <div class="related-carousel-container">
+                <div class="related-carousel-track" id="relatedTrack">
+                    @foreach($productosRelacionados as $relacionado)
+                    <div class="related-product-card">
+                        <div class="related-product-image">
+                            @if($relacionado->imagen)
+                                <img src="{{ asset('uploads/productos/' . $relacionado->imagen) }}" alt="{{ $relacionado->nombre }}">
+                            @else
+                                <img src="https://via.placeholder.com/300x200?text={{ urlencode($relacionado->nombre) }}" alt="{{ $relacionado->nombre }}">
+                            @endif
+                            
+                            <span class="related-product-price">${{ number_format($relacionado->precio, 0, ',', '.') }}</span>
+                            
+                            @auth
+                                <button type="button" 
+                                        class="related-favorite-btn {{ Auth::user()->tieneEnFavoritos($relacionado->id) ? 'active' : '' }}"
+                                        onclick="toggleFavorito({{ $relacionado->id }})"
+                                        title="{{ Auth::user()->tieneEnFavoritos($relacionado->id) ? 'Quitar de favoritos' : 'Añadir a favoritos' }}">
+                                    <i class="bi bi-heart{{ Auth::user()->tieneEnFavoritos($relacionado->id) ? '-fill' : '' }}"></i>
+                                </button>
+                            @else
+                                <a href="{{ route('login') }}" class="related-favorite-btn" title="Inicia sesión para guardar favoritos">
+                                    <i class="bi bi-heart"></i>
+                                </a>
+                            @endauth
+
+                            @if($relacionado->destacado)
+                                <span class="related-badge-destacado">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                </span>
+                            @endif
+                        </div>
+                        
+                        <div class="related-product-info">
+                            @if($relacionado->categorias->count() > 0)
+                                <span class="related-product-category">{{ $relacionado->categorias->first()->nombre }}</span>
+                            @endif
+                            
+                            <h3 class="related-product-name">{{ $relacionado->nombre }}</h3>
+                            
+                            <p class="related-product-description">{{ Str::limit($relacionado->descripcion, 60) }}</p>
+                            
+                            <a href="{{ route('web.show', $relacionado->id) }}" class="related-product-btn">
+                                Ver Producto
+                            </a>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            
+            <button class="related-carousel-btn related-next" onclick="moveRelatedCarousel(1)" aria-label="Siguiente">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="related-carousel-dots" id="relatedDots"></div>
+    </div>
+</section>
+@endif
+
 @push('scripts')
 <script>
 document.addEventListener('click', function(e) {
@@ -290,6 +371,77 @@ function mostrarToast(mensaje, tipo = 'success') {
         setTimeout(() => toast.remove(), 300);
     }, 3000);
 }
+
+// Carrusel de productos relacionados
+let relatedCurrentSlide = 0;
+const relatedTrack = document.getElementById('relatedTrack');
+const relatedDotsContainer = document.getElementById('relatedDots');
+
+function getRelatedVisibleSlides() {
+    const width = window.innerWidth;
+    if (width >= 1024) return 4;
+    if (width >= 768) return 3;
+    if (width >= 640) return 2;
+    return 1;
+}
+
+function getRelatedMaxSlides() {
+    const cards = relatedTrack ? relatedTrack.children.length : 0;
+    const visible = getRelatedVisibleSlides();
+    return Math.max(0, cards - visible);
+}
+
+function updateRelatedCarousel() {
+    if (!relatedTrack) return;
+    
+    const cardWidth = relatedTrack.querySelector('.related-product-card')?.offsetWidth || 0;
+    const gap = 24; // 1.5rem
+    const offset = relatedCurrentSlide * (cardWidth + gap);
+    
+    relatedTrack.style.transform = `translateX(-${offset}px)`;
+    
+    // Actualizar dots
+    updateRelatedDots();
+}
+
+function updateRelatedDots() {
+    if (!relatedDotsContainer) return;
+    
+    const maxSlides = getRelatedMaxSlides();
+    relatedDotsContainer.innerHTML = '';
+    
+    for (let i = 0; i <= maxSlides; i++) {
+        const dot = document.createElement('button');
+        dot.className = `related-dot ${i === relatedCurrentSlide ? 'active' : ''}`;
+        dot.onclick = () => goToRelatedSlide(i);
+        relatedDotsContainer.appendChild(dot);
+    }
+}
+
+function moveRelatedCarousel(direction) {
+    const maxSlides = getRelatedMaxSlides();
+    relatedCurrentSlide += direction;
+    
+    if (relatedCurrentSlide < 0) relatedCurrentSlide = maxSlides;
+    if (relatedCurrentSlide > maxSlides) relatedCurrentSlide = 0;
+    
+    updateRelatedCarousel();
+}
+
+function goToRelatedSlide(index) {
+    relatedCurrentSlide = index;
+    updateRelatedCarousel();
+}
+
+// Inicializar carrusel
+document.addEventListener('DOMContentLoaded', function() {
+    updateRelatedDots();
+    
+    window.addEventListener('resize', () => {
+        relatedCurrentSlide = Math.min(relatedCurrentSlide, getRelatedMaxSlides());
+        updateRelatedCarousel();
+    });
+});
 </script>
 @endpush
 
