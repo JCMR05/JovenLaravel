@@ -211,7 +211,7 @@
         </div>
         
         <div class="related-carousel">
-            <button class="related-carousel-btn related-prev" onclick="moveRelatedCarousel(-1)" aria-label="Anterior">
+            <button id="relatedPrevBtn" class="related-carousel-btn related-prev disabled" disabled onclick="moveRelatedCarousel(-1)" aria-label="Anterior">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
@@ -232,11 +232,12 @@
                             
                             @auth
                                 <button type="button" 
-                                        class="related-favorite-btn {{ Auth::user()->tieneEnFavoritos($relacionado->id) ? 'active' : '' }}"
-                                        onclick="toggleFavorito({{ $relacionado->id }})"
-                                        title="{{ Auth::user()->tieneEnFavoritos($relacionado->id) ? 'Quitar de favoritos' : 'Añadir a favoritos' }}">
-                                    <i class="bi bi-heart{{ Auth::user()->tieneEnFavoritos($relacionado->id) ? '-fill' : '' }}"></i>
-                                </button>
+    class="related-favorite-btn {{ Auth::user()->tieneEnFavoritos($relacionado->id) ? 'active' : '' }}"
+    id="related-fav-{{ $relacionado->id }}"
+    onclick="toggleFavorito({{ $relacionado->id }})"
+    title="{{ Auth::user()->tieneEnFavoritos($relacionado->id) ? 'Quitar de favoritos' : 'Añadir a favoritos' }}">
+    <i class="bi bi-heart{{ Auth::user()->tieneEnFavoritos($relacionado->id) ? '-fill' : '' }}"></i>
+</button>
                             @else
                                 <a href="{{ route('login') }}" class="related-favorite-btn" title="Inicia sesión para guardar favoritos">
                                     <i class="bi bi-heart"></i>
@@ -270,7 +271,7 @@
                 </div>
             </div>
             
-            <button class="related-carousel-btn related-next" onclick="moveRelatedCarousel(1)" aria-label="Siguiente">
+            <button id="relatedNextBtn" class="related-carousel-btn related-next" onclick="moveRelatedCarousel(1)" aria-label="Siguiente">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
@@ -347,6 +348,14 @@ function toggleFavorito(productoId) {
                 btnInline.querySelector('span').textContent = data.isFavorito ? 'En Favoritos' : 'Favoritos';
             }
             
+            // Actualizar botón en productos relacionados
+            const btnRelated = document.getElementById('related-fav-' + productoId);
+            if (btnRelated) {
+                btnRelated.classList.toggle('active', data.isFavorito);
+                btnRelated.querySelector('i').className = data.isFavorito ? 'bi bi-heart-fill' : 'bi bi-heart';
+                btnRelated.title = data.isFavorito ? 'Quitar de favoritos' : 'Añadir a favoritos';
+            }
+            
             mostrarToast(data.mensaje, 'success');
         }
     })
@@ -402,6 +411,20 @@ function updateRelatedCarousel() {
     
     // Actualizar dots
     updateRelatedDots();
+
+    // Deshabilitar botones en extremos
+    const prevBtn = document.getElementById('relatedPrevBtn');
+    const nextBtn = document.getElementById('relatedNextBtn');
+    const maxSlides = getRelatedMaxSlides();
+
+    if (prevBtn) {
+        prevBtn.disabled = relatedCurrentSlide === 0;
+        prevBtn.classList.toggle('disabled', relatedCurrentSlide === 0);
+    }
+    if (nextBtn) {
+        nextBtn.disabled = relatedCurrentSlide === maxSlides;
+        nextBtn.classList.toggle('disabled', relatedCurrentSlide === maxSlides);
+    }
 }
 
 function updateRelatedDots() {
@@ -420,11 +443,11 @@ function updateRelatedDots() {
 
 function moveRelatedCarousel(direction) {
     const maxSlides = getRelatedMaxSlides();
-    relatedCurrentSlide += direction;
-    
-    if (relatedCurrentSlide < 0) relatedCurrentSlide = maxSlides;
-    if (relatedCurrentSlide > maxSlides) relatedCurrentSlide = 0;
-    
+    let newSlide = relatedCurrentSlide + direction;
+
+    if (newSlide < 0 || newSlide > maxSlides) return; // No avanzar si está en extremo
+
+    relatedCurrentSlide = newSlide;
     updateRelatedCarousel();
 }
 
@@ -435,8 +458,12 @@ function goToRelatedSlide(index) {
 
 // Inicializar carrusel
 document.addEventListener('DOMContentLoaded', function() {
-    updateRelatedDots();
-    
+    // Espera a que el DOM esté listo y los elementos existan
+    setTimeout(function() {
+        updateRelatedDots();
+        updateRelatedCarousel();
+    }, 0);
+
     window.addEventListener('resize', () => {
         relatedCurrentSlide = Math.min(relatedCurrentSlide, getRelatedMaxSlides());
         updateRelatedCarousel();

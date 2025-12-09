@@ -61,36 +61,19 @@ class WebController extends Controller
     public function show($id)
     {
         $producto = Producto::with('categorias')->findOrFail($id);
-        
-        // Obtener productos relacionados (misma categoría)
-        $productosRelacionados = collect();
-        
-        if ($producto->categorias->count() > 0) {
-            $categoriaIds = $producto->categorias->pluck('id');
-            $productosRelacionados = Producto::with('categorias')
-                ->whereHas('categorias', function($q) use ($categoriaIds) {
-                    $q->whereIn('categorias.id', $categoriaIds);
-                })
-                ->where('id', '!=', $producto->id)
-                ->inRandomOrder()
-                ->take(4)
-                ->get();
-        }
-        
-        // Si no hay suficientes relacionados, completar con otros productos
-        if ($productosRelacionados->count() < 4) {
-            $idsExcluir = $productosRelacionados->pluck('id')->push($producto->id);
-            $faltantes = 4 - $productosRelacionados->count();
-            
-            $productosAdicionales = Producto::with('categorias')
-                ->whereNotIn('id', $idsExcluir)
-                ->inRandomOrder()
-                ->take($faltantes)
-                ->get();
-                
-            $productosRelacionados = $productosRelacionados->merge($productosAdicionales);
-        }
-        
+
+        // Obtener los IDs de las categorías del producto actual
+        $categoriaIds = $producto->categorias->pluck('id');
+
+        // Traer todos los productos de esas categorías, excluyendo el actual
+        $productosRelacionados = Producto::whereHas('categorias', function($q) use ($categoriaIds) {
+                $q->whereIn('categorias.id', $categoriaIds);
+            })
+            ->where('id', '!=', $producto->id)
+            ->with('categorias')
+            ->distinct()
+            ->get();
+
         return view('web.item', compact('producto', 'productosRelacionados'));
     }
 
