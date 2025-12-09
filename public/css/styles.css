@@ -14466,6 +14466,10 @@ textarea.form-control-lg {
 .related-carousel-container {
     overflow: hidden;
     border-radius: 1rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .related-carousel-track {
