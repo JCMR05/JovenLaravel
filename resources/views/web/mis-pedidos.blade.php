@@ -97,13 +97,13 @@
                     </div>
                     
                     @if($pedido->estado === 'pendiente')
-                    <form action="{{ route('pedidos.cambiar.estado', $pedido->id) }}" method="POST" 
-                          onsubmit="return confirm('¿Estás seguro de que deseas cancelar este pedido?')">
+                    <form action="{{ route('pedidos.cambiar.estado', $pedido->id) }}" method="POST" style="display:inline;"
+                        onsubmit="return confirm('¿Estás seguro de que deseas cancelar este pedido?')">     
                         @csrf
                         @method('PATCH')
-                        <input type="hidden" name="estado" value="cancelado">
+                        <input type="hidden" name="estado" value="anulado">
                         <button type="submit" class="btn-cancelar-pedido">
-                            <i class="bi bi-x-lg"></i> Cancelar Pedido
+                            <i class="fas fa-times"></i> Cancelar Pedido
                         </button>
                     </form>
                     @endif
