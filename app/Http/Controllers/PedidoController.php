@@ -109,6 +109,11 @@ class PedidoController extends Controller
             if ($pedido->estado !== 'pendiente') {
                 return redirect()->back()->with('error', 'Solo se pueden anular pedidos pendientes.');
             }
+            // Restar puntos al usuario si el pedido estaba pendiente
+            $puntosRestar = User::calcularPuntos($pedido->total);
+            if ($puntosRestar > 0) {
+                $pedido->user->restarPuntos($puntosRestar);
+            }
         }
 
         if ($estadoNuevo === 'enviado') {
