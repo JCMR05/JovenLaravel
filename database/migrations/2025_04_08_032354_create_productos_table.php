@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('codigo', 16)->unique();
             $table->string('nombre', 100);
-            $table->decimal('precio', 10, 2);
+            $table->decimal('precio', 12, 2);
             $table->text('descripcion')->nullable();
             $table->string('imagen', 70)->nullable();
             $table->timestamps();

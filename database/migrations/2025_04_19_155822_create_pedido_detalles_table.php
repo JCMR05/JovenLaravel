@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('pedido_id')->constrained('pedidos')->onDelete('cascade'); // Relación al pedido
             $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade'); // Relación al producto
             $table->integer('cantidad');
-            $table->decimal('precio', 6, 2); // Precio unitario en el momento de la compra
+            $table->decimal('precio', 12, 2); // Precio unitario en el momento de la compra
             $table->timestamps();
         });
     }
