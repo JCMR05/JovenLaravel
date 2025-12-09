@@ -97,14 +97,13 @@
                     </div>
                     
                     @if($pedido->estado === 'pendiente')
-                    <form action="{{ route('pedidos.cambiar.estado', $pedido->id) }}" method="POST" style="display:inline;"
-                        onsubmit="return confirm('¿Estás seguro de que deseas cancelar este pedido?')">     
+                    <button type="button" class="btn-cancelar-pedido" onclick="showCancelModal({{ $pedido->id }})">
+                        <i class="fas fa-times"></i> Cancelar Pedido
+                    </button>
+                    <form id="cancel-form-{{ $pedido->id }}" action="{{ route('pedidos.cambiar.estado', $pedido->id) }}" method="POST" style="display:none;">
                         @csrf
                         @method('PATCH')
                         <input type="hidden" name="estado" value="anulado">
-                        <button type="submit" class="btn-cancelar-pedido">
-                            <i class="fas fa-times"></i> Cancelar Pedido
-                        </button>
                     </form>
                     @endif
                 </div>
@@ -121,4 +120,34 @@
         @endif
     </div>
 </div>
+
+<div id="cancelModal" class="custom-modal" style="display:none;">
+    <div class="custom-modal-content">
+        <h4>¿Cancelar pedido?</h4>
+        <p>¿Estás seguro que deseas cancelar este pedido? Esta acción no se puede deshacer.</p>
+        <div class="custom-modal-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeCancelModal()">No, volver</button>
+            <button type="button" class="btn btn-danger" id="confirmCancelBtn">Sí, cancelar</button>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+let pedidoIdToCancel = null;
+function showCancelModal(pedidoId) {
+    pedidoIdToCancel = pedidoId;
+    document.getElementById('cancelModal').style.display = 'flex';
+}
+function closeCancelModal() {
+    document.getElementById('cancelModal').style.display = 'none';
+    pedidoIdToCancel = null;
+}
+document.getElementById('confirmCancelBtn').onclick = function() {
+    if (pedidoIdToCancel) {
+        document.getElementById('cancel-form-' + pedidoIdToCancel).submit();
+    }
+};
+</script>
+@endpush

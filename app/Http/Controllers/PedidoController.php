@@ -94,17 +94,26 @@ class PedidoController extends Controller
         $pedido = Pedido::findOrFail($id);
         $estadoNuevo = $request->input('estado');
 
-        // Validar que el estado nuevo sea uno permitido
         $estadosPermitidos = ['enviado', 'anulado', 'cancelado'];
-
         if (!in_array($estadoNuevo, $estadosPermitidos)) {
             abort(403, 'Estado no válido');
         }
 
-        // Verificar permisos según el estado
-        if (in_array($estadoNuevo, ['enviado', 'anulado'])) {
+        // Permitir anular si es el dueño o tiene el permiso
+        if ($estadoNuevo === 'anulado') {
+            $esDueno = $pedido->user_id === auth()->id();
+            $tienePermiso = auth()->user()->can('pedido-anulate');
+            if (!$esDueno && !$tienePermiso) {
+                abort(403, 'No tiene permiso para anular este pedido');
+            }
+            if ($pedido->estado !== 'pendiente') {
+                return redirect()->back()->with('error', 'Solo se pueden anular pedidos pendientes.');
+            }
+        }
+
+        if ($estadoNuevo === 'enviado') {
             if (!auth()->user()->can('pedido-anulate')) {
-                abort(403, 'No tiene permiso para cambiar a "enviado" o "anulado"');
+                abort(403, 'No tiene permiso para cambiar a "enviado"');
             }
         }
 
@@ -114,7 +123,6 @@ class PedidoController extends Controller
             }
         }
 
-        // Cambiar el estado
         $pedido->estado = $estadoNuevo;
         $pedido->save();
 
