@@ -184,7 +184,7 @@
 {{-- ============================================
     UBICACIÓN - Diseño Figma
     ============================================ --}}
-<section id="ubicacion" class="location-section-figma">
+<section id="ubicacion" class="location-section-figma" style="background: linear-gradient(to bottom, #ffffff 0%, #fffbeb 120%);">
     <div class="container">
         <div class="section-header-figma">
             <h2>Visítanos</h2>
