@@ -24,16 +24,28 @@
         </div>
 
     @else
-        @foreach($categorias as $categoria)
-            @if($categoria->productos->count() > 0)
+        @php
+            // Filtra solo las categorías con productos
+            $categoriasConProductos = $categorias->filter(fn($cat) => $cat->productos->count() > 0)->values();
+            $total = $categoriasConProductos->count();
+        @endphp
+
+        @foreach($categoriasConProductos as $i => $categoria)
+            @php
+                // Colores del ciclo
+                $colores = [
+                    ['#ffffff', '#fff9f0'],
+                    ['#fff9f0', '#fef3c7'],
+                    ['#fef3c7', '#fff9f0'],
+                ];
+                // Color de inicio para el último según el anterior
+                $colorInicioUltimo = $colores[($i - 1 + 3) % 3][1];
+            @endphp
             <div class="carousel-section"
                  style="background: 
-                    {{ $loop->index % 3 === 0 
-                        ? 'linear-gradient(to bottom, #ffffff 1%, #fff9f0 50%)'
-                        : ($loop->index % 3 === 1
-                            ? 'linear-gradient(to bottom, #fff9f0 1%, #fef3c7 50%)'
-                            : 'linear-gradient(to bottom, #fef3c7 1%, #ffffff 50%)'
-                        )
+                    {{ $i == $total - 1
+                        ? "linear-gradient(to bottom, $colorInicioUltimo 1%, #ffffff 50%)"
+                        : "linear-gradient(to bottom, {$colores[$i % 3][0]} 1%, {$colores[$i % 3][1]} 50%)"
                     }};">
                 <div class="carousel-container">
                     <div class="carousel-header">
@@ -47,7 +59,6 @@
                     ])
                 </div>
             </div>
-            @endif
         @endforeach
     @endif
 </div>
