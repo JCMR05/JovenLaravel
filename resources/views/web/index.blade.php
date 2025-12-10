@@ -28,25 +28,20 @@
             // Filtra solo las categorías con productos
             $categoriasConProductos = $categorias->filter(fn($cat) => $cat->productos->count() > 0)->values();
             $total = $categoriasConProductos->count();
+
+            // Paleta de colores para el ciclo
+            $colores = ['#ffffff', '#fff9f0', '#fef3c7'];
         @endphp
 
         @foreach($categoriasConProductos as $i => $categoria)
             @php
-                // Colores del ciclo
-                $colores = [
-                    ['#ffffff', '#fff9f0'],
-                    ['#fff9f0', '#fef3c7'],
-                    ['#fef3c7', '#fff9f0'],
-                ];
-                // Color de inicio para el último según el anterior
-                $colorInicioUltimo = $colores[($i - 1 + 3) % 3][1];
+                // El color inicial es el color final de la anterior (o el primero si es la primera)
+                $colorInicio = $i === 0 ? $colores[0] : $colores[($i) % 3];
+                // El color final es el siguiente en el ciclo (o blanco si es el último)
+                $colorFinal = $i === $total - 1 ? '#ffffff' : $colores[($i + 1) % 3];
             @endphp
             <div class="carousel-section"
-                 style="background: 
-                    {{ $i == $total - 1
-                        ? "linear-gradient(to bottom, $colorInicioUltimo 1%, #ffffff 50%)"
-                        : "linear-gradient(to bottom, {$colores[$i % 3][0]} 1%, {$colores[$i % 3][1]} 50%)"
-                    }};">
+                 style="background: linear-gradient(to bottom, {{ $colorInicio }} 1%, {{ $colorFinal }} 50%);">
                 <div class="carousel-container">
                     <div class="carousel-header">
                         <h2>{{ $categoria->nombre }}</h2>
