@@ -44,13 +44,16 @@
 
                         <div class="cart-item-controls">
                             <div class="quantity-selector">
-                                <a href="{{ route('carrito.restar', ['producto_id' => $id]) }}" 
-                                    class="quantity-btn btn btn-sm btn-outline-secondary">
+                                <a href="{{ route('carrito.restar', ['producto_id' => $id]) }}" class="quantity-btn btn btn-sm btn-outline-secondary">
                                     <i class="fas fa-minus"></i>
                                 </a>
-                                <span class="quantity-value">{{ $item['cantidad'] }}</span>
-                                <a href="{{ route('carrito.sumar', ['producto_id' => $id]) }}" 
-                                    class="quantity-btn btn btn-sm btn-outline-secondary">
+                                <form action="{{ route('carrito.actualizar', ['producto_id' => $id]) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    <input type="number" name="cantidad" value="{{ $item['cantidad'] }}" min="1"
+                                        class="quantity-input"
+                                        data-precio="{{ $item['precio'] }}">
+                                </form>
+                                <a href="{{ route('carrito.sumar', ['producto_id' => $id]) }}" class="quantity-btn btn btn-sm btn-outline-secondary">
                                     <i class="fas fa-plus"></i>
                                 </a>
                             </div>
@@ -158,4 +161,6 @@
         </div>
     </div>
 </section>
+
+
 @endsection

@@ -28,6 +28,7 @@ Route::get('/carrito/sumar', [CarritoController::class, 'sumar'])->name('carrito
 Route::get('/carrito/restar', [CarritoController::class, 'restar'])->name('carrito.restar');
 Route::get('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
 Route::get('/carrito/vaciar', [CarritoController::class, 'vaciar'])->name('carrito.vaciar');
+Route::post('/carrito/actualizar/{producto_id}', [CarritoController::class, 'actualizar'])->name('carrito.actualizar');
 
 Route::middleware(['auth'])->group(function(){
     Route::resource('usuarios', UserController::class);

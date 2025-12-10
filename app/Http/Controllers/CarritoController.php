@@ -78,4 +78,16 @@ class CarritoController extends Controller
         session()->forget('carrito');
         return redirect()->back()->with('success', 'Carrito vaciado');
     }
+    public function actualizar(Request $request, $producto_id)
+    {
+        $carrito = session()->get('carrito', []);
+        $cantidad = max(1, (int)$request->input('cantidad')); // mínimo 1
+
+        if (isset($carrito[$producto_id])) {
+            $carrito[$producto_id]['cantidad'] = $cantidad;
+            session()->put('carrito', $carrito);
+            return redirect()->back()->with('mensaje', 'Cantidad actualizada correctamente');
+        }
+        return redirect()->back()->with('error', 'Producto no encontrado en el carrito');
+    }
 }
