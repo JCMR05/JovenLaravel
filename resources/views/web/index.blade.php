@@ -26,14 +26,20 @@
     @else
         @foreach($categorias as $categoria)
             @if($categoria->productos->count() > 0)
-            <div class="carousel-section" style="background: {{ $loop->even ? '#fff9f0' : 'linear-gradient(to bottom, #ffffff, #fef3c7)' }};">
+            <div class="carousel-section"
+                 style="background: {{ $loop->even 
+                    ? 'linear-gradient(to bottom, #fff9f0 5%, #fef3c7 80%, #ffffff 100%)' 
+                    : 'linear-gradient(to bottom, #ffffff 1%, #fff9f0 50%)' }};">
                 <div class="carousel-container">
                     <div class="carousel-header">
                         <h2>{{ $categoria->nombre }}</h2>
                         <p>Descubre nuestra selección de {{ strtolower($categoria->nombre) }} elaborados artesanalmente.</p>
                     </div>
-
-                    @include('web.partials.carousel', ['items' => $categoria->productos, 'carouselId' => 'cat-'.$categoria->id, 'categoryName' => $categoria->nombre])
+                    @include('web.partials.carousel', [
+                        'items' => $categoria->productos,
+                        'carouselId' => 'cat-'.$categoria->id,
+                        'categoryName' => $categoria->nombre
+                    ])
                 </div>
             </div>
             @endif
