@@ -27,9 +27,14 @@
         @foreach($categorias as $categoria)
             @if($categoria->productos->count() > 0)
             <div class="carousel-section"
-                 style="background: {{ $loop->even 
-                    ? 'linear-gradient(to bottom, #fff9f0 5%, #fef3c7 80%, #ffffff 100%)' 
-                    : 'linear-gradient(to bottom, #ffffff 1%, #fff9f0 50%)' }};">
+                 style="background: 
+                    {{ $loop->index % 3 === 0 
+                        ? 'linear-gradient(to bottom, #ffffff 1%, #fff9f0 50%)'
+                        : ($loop->index % 3 === 1
+                            ? 'linear-gradient(to bottom, #fff9f0 1%, #fef3c7 50%)'
+                            : 'linear-gradient(to bottom, #fef3c7 1%, #ffffff 50%)'
+                        )
+                    }};">
                 <div class="carousel-container">
                     <div class="carousel-header">
                         <h2>{{ $categoria->nombre }}</h2>
