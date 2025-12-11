@@ -1,7 +1,7 @@
 @extends('web.app')
 @section('contenido')
 
-<section class="product-detail-section">
+<section class="product-detail-section" style="background: linear-gradient(to bottom, #fff9f0 0%, #fef3c7 100%);">
     <div class="container">
         {{-- Breadcrumb --}}
         <nav class="breadcrumb-figma">
