@@ -14917,3 +14917,43 @@ textarea.form-control-lg {
 .quantity-input[type=number] {
     -moz-appearance: textfield;
 }
+
+/* --- Carrito Responsive Mejorado --- */
+.cart-item-card {
+    overflow: hidden;
+}
+
+.cart-item-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.cart-item-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    margin-left: auto;
+}
+
+@media (max-width: 800px) {
+    .cart-item-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+    .cart-item-actions {
+        margin-left: 0;
+        align-self: flex-end;
+        margin-top: 0.5rem;
+    }
+    .cart-item-content,
+    .cart-item-controls,
+    .cart-item-price {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
