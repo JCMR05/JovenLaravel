@@ -7913,7 +7913,7 @@ textarea.form-control-lg {
 .quantity-controls {
     display: inline-flex;
     align-items: center;
-    border: 2px solid #e5e7eb;
+    border: 2px;
     border-radius: 0.5rem;
     overflow: hidden;
 }
