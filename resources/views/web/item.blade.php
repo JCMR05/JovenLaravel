@@ -76,7 +76,7 @@
                             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
                             <line x1="7" y1="7" x2="7.01" y2="7"></line>
                         </svg>
-                        <span>SKU: {{ $producto->codigo }}</span>
+                        <span>CODIGO: {{ $producto->codigo }}</span>
                     </div>
                     <div class="meta-item">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -102,21 +102,23 @@
                     @csrf
                     <input type="hidden" name="producto_id" value="{{ $producto->id }}">
 
-                    <div class="quantity-selector">
-                        <label>Cantidad:</label>
-                        <div class="quantity-controls">
-                            <button type="button" class="qty-btn" data-action="decrease">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                </svg>
-                            </button>
-                            <input type="number" name="cantidad" id="inputQuantity" value="1" min="1" class="qty-input">
-                            <button type="button" class="qty-btn" data-action="increase">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                </svg>
-                            </button>
+                    <div class="product-detail-grid">
+                        <div class="quantity-selector">
+                            <label>Cantidad:</label>
+                            <div class="quantity-controls">
+                                <button type="button" class="qty-btn" data-action="decrease">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                </button>
+                                <input type="number" name="cantidad" id="inputQuantity" value="1" min="1" class="qty-input">
+                                <button type="button" class="qty-btn" data-action="increase">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
