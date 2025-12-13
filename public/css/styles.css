@@ -5932,10 +5932,8 @@ textarea.form-control-lg {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   border: 1px solid #fef3c7;
   transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
   position: relative;
-  height: 100%;
+  min-height: 420px; /* Ajusta según el diseño */
 }
 
 .featured-card-figma:hover {
@@ -6010,8 +6008,14 @@ textarea.form-control-lg {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1.25rem;
+  padding: 0 1.25rem;
+  background: transparent;
   width: 100%;
+  z-index: 2;
 }
 
 .featured-price-figma {
