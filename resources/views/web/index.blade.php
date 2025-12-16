@@ -196,7 +196,7 @@
             <div class="map-container">
                 {{-- Reemplaza las coordenadas con la ubicación real de tu panadería --}}
                 <iframe
-                    src="https://maps.app.goo.gl/hPeqN3dvtgfpsUuT6"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1975.9715658994473!2d-72.50334924269262!3d7.901010393153596!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e6645a66276cc87%3A0x4c30d49c34220de4!2sSENA%20CIES!5e0!3m2!1ses-419!2sco!4v1765907567419!5m2!1ses-419!2sco"
                     width="100%"
                     height="100%"
                     style="border:0;"
