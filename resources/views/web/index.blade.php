@@ -196,7 +196,7 @@
             <div class="map-container">
                 {{-- Reemplaza las coordenadas con la ubicación real de tu panadería --}}
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.123456789!2d-74.0817!3d4.6097!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNMKwMzYnMzQuOSJOIDc0wrAwNCc1NC4xIlc!5e0!3m2!1ses!2sco!4v1234567890"
+                    src="https://maps.app.goo.gl/hPeqN3dvtgfpsUuT6"
                     width="100%"
                     height="100%"
                     style="border:0;"
