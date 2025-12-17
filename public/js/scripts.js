@@ -702,11 +702,45 @@ function initCarousel(id, products) {
         `;
     }
 
+    // Measure maximum card height across all products (render offscreen once)
+    function computeMaxCardHeight() {
+        try {
+            const tmp = document.createElement('div');
+            tmp.style.position = 'absolute';
+            tmp.style.visibility = 'hidden';
+            tmp.style.left = '-9999px';
+            tmp.style.top = '0';
+            tmp.innerHTML = products.map(createCard).join('');
+            document.body.appendChild(tmp);
+            const cards = tmp.querySelectorAll('.product-card');
+            let max = 0;
+            cards.forEach(c => {
+                const h = c.offsetHeight;
+                if (h > max) max = h;
+            });
+            document.body.removeChild(tmp);
+            return max || 420;
+        } catch (e) {
+            return 420; // fallback
+        }
+    }
+
     function render() {
         const start = current * perPage;
         const visible = products.slice(start, start + perPage);
         track.style.gridTemplateColumns = `repeat(${perPage}, 1fr)`;
         track.innerHTML = visible.map(createCard).join('');
+        // ensure carousel container keeps a fixed height equal to the tallest card
+        const content = track.closest('.carousel-content') || track.parentElement;
+        if (content) {
+            if (!content.dataset.fixedHeight) {
+                const maxH = computeMaxCardHeight();
+                content.style.height = maxH + 'px';
+                content.dataset.fixedHeight = maxH;
+            } else {
+                content.style.height = content.dataset.fixedHeight + 'px';
+            }
+        }
         updateButtons();
     }
 

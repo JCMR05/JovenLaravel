@@ -469,3 +469,31 @@ html.dark-mode .total-label {
 html.dark-mode .summary-divider {
   background-color: #444;
 }
+
+/* Carousel: prevent layout shifts when paginating by fixing container height and hiding overflow */
+.carousel-wrapper,
+.carousel-content {
+  overflow: hidden !important;
+}
+.carousel-content {
+  will-change: height;
+}
+
+/* Allow navigation buttons to be visible outside the clipped carousel content
+   while keeping the inner content height fixed. Increase horizontal padding
+   so buttons are not cut on small screens. */
+.carousel-wrapper {
+  overflow: visible !important;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.carousel-btn-prev { left: 0.5rem !important; }
+.carousel-btn-next { right: 0.5rem !important; }
+
+@media (max-width: 639px) {
+  .carousel-wrapper { padding-left: 0.75rem; padding-right: 0.75rem; }
+  .carousel-btn-prev { left: 0.25rem !important; }
+  .carousel-btn-next { right: 0.25rem !important; }
+}
+
